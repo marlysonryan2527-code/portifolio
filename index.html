@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ryan_next_tech — Sites institucionais para pequenas empresas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#FFFFFF;
+    --ink-soft:#D8DDE5;
+    --paper:#000000;
+    --paper-line:#232323;
+    --dark-bg:#070707;
+    --green:#22C55E;
+    --green-deep:#16A34A;
+    --brass:#4ADE80;
+    --brass-soft:#86EFAC;
+    --gray:#9AA0A8;
+    --white:#FFFFFF;
+    --radius:2px;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    margin:0;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+  .mono{
+    font-family:'IBM Plex Mono',monospace;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    font-size:12px;
+  }
+  a{color:inherit;text-decoration:none;}
+  img,svg{display:block;max-width:100%;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+  section{position:relative;}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(0,0,0,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--paper-line);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 32px;max-width:var(--maxw);margin:0 auto;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px;}
+  .brand-mark{
+    font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--ink);
+  }
+  .brand-mark em{font-style:normal;color:var(--green);}
+  .brand-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;}
+  nav.links{display:flex;gap:32px;align-items:center;}
+  nav.links a{font-size:14px;color:var(--ink-soft);transition:color .2s;}
+  nav.links a:hover{color:var(--green);}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 22px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+    border-radius:var(--radius);
+    cursor:pointer;border:1px solid transparent;
+    transition:all .2s ease;
+  }
+  .btn-primary{background:var(--green);color:#000;}
+  .btn-primary:hover{background:var(--green-deep);}
+  .btn-ghost{border-color:var(--ink);color:var(--ink);}
+  .btn-ghost:hover{background:var(--ink);color:#000;}
+  .nav-cta{display:none;}
+  @media(min-width:900px){.nav-cta{display:inline-flex;}}
+  .burger{display:block;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid var(--ink);padding:8px 12px;background:none;color:var(--ink);cursor:pointer;}
+  @media(min-width:900px){.burger{display:none;}}
+  nav.links{display:none;}
+  @media(min-width:900px){nav.links{display:flex;}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 80px;
+    background-image:
+      linear-gradient(var(--paper-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+    background-size:48px 48px;
+    background-position:center top;
+    border-bottom:1px solid var(--paper-line);
+  }
+  .hero-inner{
+    max-width:var(--maxw);margin:0 auto;padding:0 32px;
+    display:grid;grid-template-columns:1fr;gap:56px;
+  }
+  @media(min-width:960px){.hero-inner{grid-template-columns:1.1fr 0.9fr;align-items:center;}}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    color:var(--green);margin-bottom:22px;
+  }
+  .eyebrow::before{content:'';width:22px;height:1px;background:var(--green);}
+  .hero h1{
+    font-size:clamp(34px,5vw,58px);line-height:1.06;margin-bottom:24px;
+  }
+  .hero h1 em{font-style:italic;color:var(--green);}
+  .hero p.lead{font-size:18px;color:var(--gray);max-width:480px;margin-bottom:36px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px;}
+  .hero-stats{display:flex;gap:36px;flex-wrap:wrap;}
+  .stat .num{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--green);}
+  .stat .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;}
+
+  /* blueprint stamp graphic */
+  .stamp-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+  .stamp{width:100%;max-width:420px;}
+  .stamp .rot{
+    animation:spin 40s linear infinite;
+    transform-origin:210px 210px;
+  }
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  @media(prefers-reduced-motion:reduce){.stamp .rot{animation:none;}}
+
+  /* ---------- TRUST STRIP ---------- */
+  .trust{
+    padding:26px 0;border-bottom:1px solid var(--paper-line);
+  }
+  .trust .wrap{
+    display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between;align-items:center;
+  }
+  .trust span{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;}
+
+  /* ---------- SECTION HEADS ---------- */
+  .sec-head{max-width:640px;margin-bottom:56px;}
+  .sec-head .mono{color:var(--green);display:block;margin-bottom:14px;}
+  .sec-head h2{font-size:clamp(26px,3.6vw,40px);line-height:1.15;}
+  .sec-head p{color:var(--gray);margin-top:16px;font-size:16px;}
+
+  section.block{padding:100px 0;}
+  section.block.dark{background:var(--dark-bg);color:#fff;border-top:1px solid var(--paper-line);border-bottom:1px solid var(--paper-line);}
+  section.block.dark h2, section.block.dark h3{color:#fff;}
+  section.block.dark p{color:#B9BFC6;}
+  section.block.dark .sec-head .mono{color:var(--brass-soft);}
+
+  /* ---------- PROBLEM / VALUE CARDS ---------- */
+  .cards3{display:grid;gap:1px;background:var(--paper-line);border:1px solid var(--paper-line);}
+  @media(min-width:800px){.cards3{grid-template-columns:repeat(3,1fr);}}
+  .card{background:var(--paper);padding:36px 32px;}
+  .card .num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--green);margin-bottom:18px;display:block;}
+  .card h3{font-size:20px;margin-bottom:12px;}
+  .card p{color:var(--gray);font-size:15px;margin:0;}
+
+  /* ---------- PROCESS: cross-section diagram ---------- */
+  .cross{
+    display:grid;grid-template-columns:1fr;gap:48px;
+  }
+  @media(min-width:960px){.cross{grid-template-columns:0.9fr 1.1fr;align-items:center;}}
+  .layers{display:flex;flex-direction:column;border:1px solid var(--paper-line);}
+  .layer{
+    display:flex;align-items:flex-start;gap:20px;
+    padding:28px 28px;border-bottom:1px solid var(--paper-line);
+    position:relative;
+  }
+  .layer:last-child{border-bottom:none;}
+  .layer .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--green);
+    writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);
+    padding-top:2px;
+  }
+  .layer h3{font-size:19px;margin-bottom:8px;}
+  .layer p{color:var(--gray);font-size:14.5px;margin:0;}
+  .layer .dim{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray);margin-top:10px;display:block;}
+
+  /* ---------- PORTFOLIO ---------- */
+  .grid-portfolio{display:grid;gap:28px;grid-template-columns:1fr;}
+  @media(min-width:720px){.grid-portfolio{grid-template-columns:repeat(2,1fr);}}
+  .mock{
+    border:1px solid var(--paper-line);background:#050505;overflow:hidden;
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .mock:hover{transform:translateY(-4px);box-shadow:0 18px 40px -20px rgba(34,197,94,0.25);border-color:var(--green);}
+  .mock-bar{
+    display:flex;align-items:center;gap:6px;padding:10px 14px;background:#111111;
+  }
+  .mock-bar span{width:8px;height:8px;border-radius:50%;background:#2f2f2f;}
+  .mock-bar .url{
+    margin-left:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#7a7a7a;
+  }
+  .mock-body{padding:26px;min-height:170px;display:flex;flex-direction:column;justify-content:space-between;}
+  .mock-body h4{font-size:18px;margin-bottom:8px;}
+  .mock-body p{color:var(--gray);font-size:14px;margin:0 0 18px;}
+  .mock-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--green);text-transform:uppercase;letter-spacing:.05em;}
+
+  /* ---------- TESTIMONIALS ---------- */
+  .quotes{display:grid;gap:1px;background:var(--paper-line);border:1px solid var(--paper-line);}
+  @media(min-width:820px){.quotes{grid-template-columns:repeat(3,1fr);}}
+  .quote{background:var(--dark-bg);padding:32px 28px;display:flex;flex-direction:column;gap:20px;}
+  .quote p.body{font-size:15.5px;color:var(--ink-soft);flex:1;}
+  .quote .who{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--gray);text-transform:uppercase;letter-spacing:.04em;}
+  .quote .who b{color:var(--green);font-style:normal;display:block;font-family:'Fraunces',serif;font-size:15px;text-transform:none;letter-spacing:0;margin-bottom:2px;}
+
+  /* ---------- CONTACT ---------- */
+  .contact-grid{display:grid;gap:56px;grid-template-columns:1fr;}
+  @media(min-width:960px){.contact-grid{grid-template-columns:0.9fr 1.1fr;}}
+  .contact-info h2{font-size:clamp(26px,3.6vw,38px);color:#fff;margin-bottom:18px;}
+  .contact-info p{color:#B9BFC6;margin-bottom:28px;max-width:420px;}
+  .contact-list{display:flex;flex-direction:column;gap:16px;}
+  .contact-list div{display:flex;justify-content:space-between;border-bottom:1px solid #1f1f1f;padding-bottom:12px;max-width:380px;}
+  .contact-list .k{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7a7a7a;text-transform:uppercase;}
+  .contact-list .v{font-size:14px;color:#fff;}
+
+  form.form{display:flex;flex-direction:column;gap:18px;}
+  .row2{display:grid;gap:18px;grid-template-columns:1fr;}
+  @media(min-width:640px){.row2{grid-template-columns:1fr 1fr;}}
+  .field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9AA0A8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+  .field input, .field select, .field textarea{
+    width:100%;background:#0d0d0d;border:1px solid #262626;color:#fff;
+    padding:13px 14px;font-family:'Inter',sans-serif;font-size:14.5px;border-radius:var(--radius);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none;border-color:var(--green);
+  }
+  .field textarea{resize:vertical;min-height:110px;}
+  .form .btn-primary{background:var(--green);color:#000;align-self:flex-start;margin-top:6px;}
+  .form .btn-primary:hover{background:var(--green-deep);}
+  .form-note{font-size:12.5px;color:#7a7a7a;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:44px 0;border-top:1px solid var(--paper-line);}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:center;}
+  footer .mono{color:var(--gray);}
+
+  ::selection{background:var(--brass-soft);color:#000;}
+
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline:2px solid var(--green);outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="#top">
+      <span class="brand-mark">Ryan<em>_next_tech</em></span>
+    </a>
+    <nav class="links">
+      <a href="#servicos">Serviços</a>
+      <a href="#processo">Processo</a>
+      <a href="#portfolio">Portfólio</a>
+      <a href="#depoimentos">Depoimentos</a>
+    </nav>
+    <a href="login.html" class="btn btn-primary nav-cta">Login</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div>
+      <span class="eyebrow mono">Sites institucionais para pequenas empresas</span>
+      <h1> <em>Transformamos</em> ideias em sites rápidos, modernos e profissionais.</h1>
+      <p class="lead">Projetamos e construímos o site da sua empresa como uma obra bem planejada: da estrutura ao acabamento, cada etapa é entregue com prazo, clareza e responsabilidade técnica.</p>
+      <div class="hero-actions">
+        <a href="loginryan.html" class="btn btn-primary">Login</a>
+        <a href="#portfolio" class="btn btn-ghost">Ver portfólio</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="num">120+</div><div class="lbl">Sites entregues</div></div>
+        <div class="stat"><div class="num">18 dias</div><div class="lbl">Prazo médio</div></div>
+        <div class="stat"><div class="num">4.9/5</div><div class="lbl">Satisfação dos clientes</div></div>
+      </div>
+    </div>
+    <div class="stamp-wrap">
+      <svg class="stamp" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="210" cy="210" r="150" fill="none" stroke="#22C55E" stroke-width="1"/>
+        <circle cx="210" cy="210" r="118" fill="none" stroke="#232323" stroke-width="1"/>
+        <g class="rot">
+          <circle cx="210" cy="210" r="150" fill="none" stroke="#4ADE80" stroke-width="1" stroke-dasharray="2 6"/>
+          <circle cx="210" cy="60" r="3" fill="#4ADE80"/>
+          <circle cx="210" cy="360" r="3" fill="#4ADE80"/>
+          <circle cx="60" cy="210" r="3" fill="#22C55E"/>
+          <circle cx="360" cy="210" r="3" fill="#22C55E"/>
+        </g>
+        <line x1="210" y1="30" x2="210" y2="390" stroke="#232323" stroke-width="1"/>
+        <line x1="30" y1="210" x2="390" y2="210" stroke="#232323" stroke-width="1"/>
+        <rect x="150" y="150" width="120" height="120" fill="none" stroke="#FFFFFF" stroke-width="1.4"/>
+        <text x="210" y="205" text-anchor="middle" font-family="Fraunces, serif" font-weight="700" font-size="30" fill="#FFFFFF">R</text>
+        <text x="210" y="230" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9AA0A8" letter-spacing="1">RYAN_NEXT_TECH°01</text>
+        <text x="210" y="55" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9AA0A8">N</text>
+        <text x="210" y="372" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9AA0A8">S</text>
+        <text x="45" y="214" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9AA0A8">O</text>
+        <text x="375" y="214" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9AA0A8">L</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="wrap">
+    <span>Atendemos negócios como:</span>
+    <span>Clínicas &amp; consultórios</span>
+    <span>Escritórios de advocacia</span>
+    <span>Lojas &amp; varejo local</span>
+    <span>Restaurantes &amp; cafés</span>
+    <span>Prestadores de serviço</span>
+  </div>
+</div>
+
+<section class="block" id="servicos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="mono">Por que a Ryan_next_tech</span>
+      <h2>Presença digital sem enrolação técnica.</h2>
+      <p>Pequenas empresas não precisam de um site genérico — precisam de um site que funciona, carrega rápido e passa confiança no primeiro segundo.</p>
+    </div>
+    <div class="cards3">
+      <div class="card reveal">
+        <span class="num mono">01</span>
+        <h3>Feito sob medida</h3>
+        <p>Nada de templates genéricos remontados. Cada site é desenhado a partir do que sua empresa realmente vende e de quem é seu cliente.</p>
+      </div>
+      <div class="card reveal">
+        <span class="num mono">02</span>
+        <h3>Prazo é compromisso</h3>
+        <p>Cronograma definido no início do projeto e cumprido — sem enrolação, sem atrasos silenciosos.</p>
+      </div>
+      <div class="card reveal">
+        <span class="num mono">03</span>
+        <h3>Você entende o que paga</h3>
+        <p>Explicamos cada etapa em linguagem simples. Sem jargão técnico usado para confundir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block dark" id="processo">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="mono">Como construímos</span>
+      <h2>Três camadas, como qualquer construção bem feita.</h2>
+      <p>O nome não é acaso: tratamos cada site como uma edificação — com fundação, estrutura e acabamento, nessa ordem.</p>
+    </div>
+    <div class="cross">
+      <div class="layers reveal">
+        <div class="layer">
+          <span class="tag">Fundação</span>
+          <div>
+            <h3>Planejamento</h3>
+            <p>Entendemos seu negócio, seus concorrentes e o que seu cliente precisa ver para confiar em você.</p>
+            <span class="dim">Etapa 1 — 3 a 5 dias</span>
+          </div>
+        </div>
+        <div class="layer">
+          <span class="tag">Estrutura</span>
+          <div>
+            <h3>Construção</h3>
+            <p>Montamos as páginas, textos e formulários sobre uma base técnica rápida, segura e responsiva.</p>
+            <span class="dim">Etapa 2 — 7 a 10 dias</span>
+          </div>
+        </div>
+        <div class="layer">
+          <span class="tag">Acabamento</span>
+          <div>
+            <h3>Refinamento e entrega</h3>
+            <p>Ajustes finos de design, testes em diferentes telas e treinamento para sua equipe atualizar conteúdo.</p>
+            <span class="dim">Etapa 3 — 3 a 5 dias</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+          <rect x="0" y="0" width="480" height="340" fill="none"/>
+          <line x1="40" y1="40" x2="40" y2="300" stroke="#2f2f2f" stroke-width="1"/>
+          <line x1="30" y1="120" x2="50" y2="120" stroke="#2f2f2f" stroke-width="1"/>
+          <line x1="30" y1="200" x2="50" y2="200" stroke="#2f2f2f" stroke-width="1"/>
+          <line x1="30" y1="280" x2="50" y2="280" stroke="#2f2f2f" stroke-width="1"/>
+          <rect x="70" y="220" width="360" height="60" fill="#0d0d0d" stroke="#4ADE80" stroke-width="1.2"/>
+          <rect x="70" y="140" width="360" height="80" fill="#0d0d0d" stroke="#22C55E" stroke-width="1.2"/>
+          <rect x="70" y="80" width="360" height="60" fill="#0d0d0d" stroke="#86EFAC" stroke-width="1.2"/>
+          <text x="250" y="255" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#86EFAC">FUNDAÇÃO</text>
+          <text x="250" y="184" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4ADE80">ESTRUTURA</text>
+          <text x="250" y="114" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#FFFFFF">ACABAMENTO</text>
+          <line x1="70" y1="60" x2="430" y2="60" stroke="#2f2f2f" stroke-width="1" stroke-dasharray="3 4"/>
+          <text x="430" y="52" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" fill="#7a7a7a">NÍVEL DO USUÁRIO</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="portfolio">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="mono">Portfólio</span>
+      <h2>Alguns projetos recentes.</h2>
+      <p>Exemplos representativos do tipo de site que construímos para diferentes segmentos.</p>
+    </div>
+    <div class="grid-portfolio">
+      <div class="mock reveal">
+        <div class="mock-bar"><span></span><span></span><span></span><span class="url">clinicaboavista.com.br</span></div>
+        <div class="mock-body">
+          <div>
+            <span class="mock-tag">Saúde</span>
+            <h4>Clínica Boa Vista</h4>
+            <p>Agendamento online, especialidades e localização em destaque.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mock reveal">
+        <div class="mock-bar"><span></span><span></span><span></span><span class="url">padariaesperanca.com.br</span></div>
+        <div class="mock-body">
+          <div>
+            <span class="mock-tag">Alimentação</span>
+            <h4>Padaria Esperança</h4>
+            <p>Cardápio, encomendas por WhatsApp e horário de funcionamento sempre visível.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mock reveal">
+        <div class="mock-bar"><span></span><span></span><span></span><span class="url">mirandaadv.com.br</span></div>
+        <div class="mock-body">
+          <div>
+            <span class="mock-tag">Jurídico</span>
+            <h4>Miranda Advocacia</h4>
+            <p>Áreas de atuação, formulário de consulta e credibilidade em primeiro plano.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mock reveal">
+        <div class="mock-bar"><span></span><span></span><span></span><span class="url">atelierlua.com.br</span></div>
+        <div class="mock-body">
+          <div>
+            <span class="mock-tag">Varejo</span>
+            <h4>Ateliê Lua</h4>
+            <p>Catálogo de produtos, integração com Instagram e loja simples de vender.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block dark" id="depoimentos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="mono">Depoimentos</span>
+      <h2>O que dizem quem já construiu com a gente.</h2>
+    </div>
+    <div class="quotes">
+      <div class="quote reveal">
+        <p class="body">"Recebi o site pronto no prazo combinado, sem surpresas. Finalmente entendi cada etapa do processo."</p>
+        <div class="who"><b>Renata Miranda</b>Miranda Advocacia</div>
+      </div>
+      <div class="quote reveal">
+        <p class="body">"Meus clientes começaram a encontrar a padaria pelo Google. O site carrega rápido até no celular mais simples."</p>
+        <div class="who"><b>Carlos Esperança</b>Padaria Esperança</div>
+      </div>
+      <div class="quote reveal">
+        <p class="body">"Time explicou tudo em português claro. Não me senti perdida em termos técnicos em nenhum momento."</p>
+        <div class="who"><b>Juliana Boavista</b>Clínica Boa Vista</div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap">
+    <span class="brand-mark" style="font-size:16px;">Ryan<em style="font-style:normal;color:var(--green);">_next_tech</em></span>
+    <span class="mono">© 2026 Ryan_next_tech · Sites para pequenas empresas</span>
+    <span class="mono">Fortaleza, CE — Brasil</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const items = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{threshold:0.15});
+  items.forEach(i=>io.observe(i));
+
+  const statusMessages = {
+    sucesso: 'Solicitação recebida — entraremos em contato em breve.',
+    'dados-invalidos': 'Confira os campos obrigatórios e o e-mail informado.',
+    'erro-envio': 'Não foi possível enviar agora. Tente novamente mais tarde.',
+    'metodo-invalido': 'A solicitação não pôde ser processada.'
+  };
+  const status = document.getElementById('form-status');
+  const statusCode = new URLSearchParams(window.location.search).get('status');
+  if (statusCode && statusMessages[statusCode]) {
+    status.textContent = statusMessages[statusCode];
+  }
+</script>
+
+</body>
+</html>
