@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planos e serviços — Ryan_next_tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#fff;--ink-soft:#D8DDE5;--paper:#000;--line:#232323;--dark:#070707;--green:#22C55E;--green-deep:#16A34A;--brass:#4ADE80;--gray:#9AA0A8;--radius:2px;--maxw:1180px;}
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  body.lock{overflow:hidden;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;letter-spacing:-.01em;}
+  .mono{font:12px 'IBM Plex Mono',monospace;letter-spacing:.05em;text-transform:uppercase;}
+  a{color:inherit;text-decoration:none;}
+  [hidden]{display:none!important;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+  header{position:sticky;top:0;z-index:30;background:rgba(0,0,0,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 32px;max-width:var(--maxw);margin:0 auto;}
+  .brand-mark{font:700 22px 'Fraunces',serif;}
+  .brand-mark em{font-style:normal;color:var(--green);}
+  .nav-r{display:flex;align-items:center;gap:22px;}
+  .nav-r a.lk{font-size:14px;color:var(--ink-soft);}
+  .nav-r a.lk:hover{color:var(--green);}
+  @media(max-width:640px){.nav{padding:14px 20px;}.nav-r a.lk{display:none;}.wrap{padding:0 20px;}}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;border-radius:var(--radius);cursor:pointer;border:1px solid transparent;transition:background .2s,color .2s,border-color .2s;}
+  .btn-primary{background:var(--green);color:#000;}
+  .btn-primary:hover{background:var(--green-deep);}
+  .btn-ghost{border-color:var(--ink);color:var(--ink);background:none;}
+  .btn-ghost:hover{background:var(--ink);color:#000;}
+  .btn-sm{padding:9px 16px;}
+  .btn[aria-pressed="true"]{background:none;border-color:var(--green);color:var(--brass);}
+  .count{background:var(--green);color:#000;border-radius:10px;padding:0 7px;font-size:11px;}
+  :focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+
+  .hero{padding:80px 0 64px;border-bottom:1px solid var(--line);background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:48px 48px;background-position:center top;}
+  .hero h1{font-size:clamp(32px,5vw,54px);line-height:1.08;max-width:720px;margin-bottom:20px;}
+  .hero p{font-size:18px;color:var(--gray);max-width:520px;margin:0;}
+  section.block{padding:80px 0;}
+  section.dark{background:var(--dark);border-top:1px solid var(--line);}
+  .sec-head{max-width:620px;margin-bottom:44px;}
+  .sec-head h2{font-size:clamp(26px,3.4vw,38px);line-height:1.15;}
+  .sec-head p{color:var(--gray);margin:14px 0 0;}
+
+  .plans{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);}
+  @media(min-width:900px){.plans{grid-template-columns:repeat(3,1fr);}}
+  .plan{background:var(--paper);padding:36px 32px;display:flex;flex-direction:column;}
+  .plan.hot{box-shadow:inset 0 2px 0 var(--green);}
+  .plan .top{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:28px;}
+  .plan h3{font-size:24px;}
+  .badge{font:11px 'IBM Plex Mono',monospace;color:var(--brass);border:1px solid var(--green-deep);padding:3px 9px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
+  .plan .for{color:var(--gray);font-size:14.5px;margin:10px 0 22px;min-height:46px;}
+  .price{font:600 38px 'Fraunces',serif;color:var(--green);line-height:1;}
+  .price small{font:400 13px 'Inter',sans-serif;color:var(--gray);margin-left:6px;}
+  .days{font:11px 'IBM Plex Mono',monospace;color:var(--gray);margin:8px 0 24px;}
+  .plan ul{list-style:none;margin:0 0 28px;padding:0;display:grid;gap:10px;flex:1;}
+  .plan li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-soft);}
+  .plan li::before{content:'';flex:none;width:6px;height:6px;margin-top:9px;background:var(--green);}
+  .plan .btn{width:100%;}
+
+  .extras{border:1px solid var(--line);}
+  .extra{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 28px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  .extra:last-child{border-bottom:0;}
+  .extra h3{font-size:18px;margin-bottom:2px;}
+  .extra p{margin:0;color:var(--gray);font-size:14.5px;max-width:520px;}
+  .extra .end{display:flex;align-items:center;gap:20px;}
+  .extra .p{font:600 20px 'Fraunces',serif;}
+  .note{margin-top:28px;color:var(--gray);font-size:14.5px;max-width:620px;}
+
+  footer{padding:40px 0;border-top:1px solid var(--line);}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;color:var(--gray);}
+
+  /* ---- pedido (gaveta) ---- */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:40;}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--paper);border-left:1px solid var(--line);z-index:41;display:flex;flex-direction:column;}
+  .d-head{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--line);}
+  .d-head h2{font-size:22px;}
+  .d-body{flex:1;overflow-y:auto;padding:24px;}
+  .lines{border:1px solid var(--line);margin-bottom:24px;}
+  .line{display:flex;justify-content:space-between;gap:14px;padding:14px 18px;border-bottom:1px solid var(--line);font-size:14.5px;}
+  .line small{display:block;color:var(--gray);font:11px 'IBM Plex Mono',monospace;}
+  .line button{background:none;border:0;color:var(--gray);cursor:pointer;font-size:12px;padding:0;text-decoration:underline;}
+  .line button:hover{color:var(--ink);}
+  .total{display:flex;justify-content:space-between;align-items:baseline;padding:16px 18px;background:var(--dark);}
+  .total b{font:600 24px 'Fraunces',serif;color:var(--green);}
+  .empty{color:var(--gray);padding:24px 18px;font-size:14.5px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font:11px 'IBM Plex Mono',monospace;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;}
+  .field input,.field textarea{width:100%;background:#0d0d0d;border:1px solid #262626;color:#fff;padding:12px 14px;font:14.5px 'Inter',sans-serif;border-radius:var(--radius);}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--green);}
+  .field textarea{min-height:76px;resize:vertical;}
+  .err{color:#F87171;font-size:13.5px;min-height:20px;margin:0 0 10px;}
+  .d-foot{padding:18px 24px;border-top:1px solid var(--line);}
+  .d-foot .btn{width:100%;}
+  .d-foot p{font-size:12.5px;color:var(--gray);margin:10px 0 0;}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand-mark" href="index.html">Ryan<em>_next_tech</em></a>
+    <div class="nav-r">
+      <a class="lk" href="#planos">Planos</a>
+      <a class="lk" href="#extras">Extras</a>
+      <a class="lk" href="login.html">Área do cliente</a>
+      <button class="btn btn-primary btn-sm" id="open-cart" type="button">Meu pedido <span class="count" id="count">0</span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Escolha o site da sua empresa e comece hoje.</h1>
+    <p>Três planos com preço fechado e prazo definido. Monte seu pedido, envie pelo WhatsApp e a equipe confirma os detalhes com você.</p>
+  </div>
+</section>
+
+<section class="block" id="planos">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Qual plano cabe no seu negócio?</h2>
+      <p>Todos incluem site responsivo, formulário de contato e treinamento para você atualizar o conteúdo.</p>
+    </div>
+    <div class="plans" id="plans"></div>
+  </div>
+</section>
+
+<section class="block dark" id="extras">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Adicione o que falta.</h2>
+      <p>Serviços avulsos que você pode somar a qualquer plano.</p>
+    </div>
+    <div class="extras" id="extras-list"></div>
+    <p class="note">Ao enviar o pedido, você não paga nada na hora. A equipe responde pelo WhatsApp para alinhar detalhes e forma de pagamento.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><span class="mono">© 2026 Ryan_next_tech</span><span class="mono">Fortaleza, CE — Brasil</span></div>
+</footer>
+
+<div class="overlay" id="overlay" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="d-title" hidden>
+  <div class="d-head"><h2 id="d-title">Meu pedido</h2><button class="btn btn-ghost btn-sm" id="close-cart" type="button">Fechar</button></div>
+  <div class="d-body">
+    <div class="lines" id="lines"></div>
+    <form id="order" novalidate>
+      <div class="field"><label for="f-name">Seu nome</label><input id="f-name" autocomplete="name" required></div>
+      <div class="field"><label for="f-biz">Nome da empresa</label><input id="f-biz" autocomplete="organization"></div>
+      <div class="field"><label for="f-tel">WhatsApp</label><input id="f-tel" type="tel" inputmode="tel" placeholder="(85) 90000-0000" autocomplete="tel" required></div>
+      <div class="field"><label for="f-obs">Observações (opcional)</label><textarea id="f-obs"></textarea></div>
+      <p class="err" id="err" role="alert"></p>
+    </form>
+  </div>
+  <div class="d-foot"><button class="btn btn-primary" id="send" type="button">Enviar pedido pelo WhatsApp</button><p>Vai abrir o WhatsApp com o resumo pronto para enviar.</p></div>
+</aside>
+
+<script>
+  // ====== EDITE AQUI: seu número (com 55 + DDD) e seus preços ======
+  const WHATSAPP = '5585900000000';
+  const plans = [
+    {id:'ess', name:'Essencial',    price:1490, days:'Entrega em até 10 dias', para:'Para quem precisa de presença online rápida e objetiva.', items:['Até 5 páginas','Botão de WhatsApp e mapa','Formulário de contato','Otimizado para celular']},
+    {id:'pro', name:'Profissional', price:2490, days:'Entrega em até 18 dias', para:'Para quem quer atrair clientes pelo Google e passar mais confiança.', items:['Até 10 páginas','Tudo do Essencial','SEO básico incluso','Galeria ou portfólio','Integração com Instagram'], hot:true},
+    {id:'com', name:'Completo',     price:3990, days:'Entrega em até 25 dias', para:'Para quem vende ou agenda pelo site e quer crescer sem limite.', items:['Páginas ilimitadas','Tudo do Profissional','Catálogo de produtos','Agendamento online','30 dias de suporte após a entrega']}
+  ];
+  const extras = [
+    {id:'logo', name:'Criação de logotipo',     price:350, desc:'Logotipo simples e profissional, com arquivos para uso no site e nas redes.'},
+    {id:'txt',  name:'Redação dos textos',      price:400, desc:'Nós escrevemos os textos das páginas a partir de uma conversa com você.'},
+    {id:'seo',  name:'SEO inicial avançado',    price:300, desc:'Cadastro no Google Meu Negócio e ajustes para aparecer nas buscas da sua cidade.'},
+    {id:'host', name:'Domínio e hospedagem',    price:280, desc:'Registro do endereço .com.br e hospedagem por 12 meses.'}
+  ];
+  // =================================================================
+
+  const $ = id => document.getElementById(id);
+  const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+  const state = {plan:null, extras:new Set()};
+
+  $('plans').innerHTML = plans.map(p => `
+    <div class="plan ${p.hot?'hot':''}">
+      <div class="top"><h3>${p.name}</h3>${p.hot?'<span class="badge">Mais escolhido</span>':''}</div>
+      <p class="for">${p.para}</p>
+      <div class="price">${brl(p.price)}<small>pagamento único</small></div>
+      <div class="days">${p.days}</div>
+      <ul>${p.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+      <button class="btn ${p.hot?'btn-primary':'btn-ghost'}" data-plan="${p.id}" aria-pressed="false" type="button">Escolher ${p.name}</button>
+    </div>`).join('');
+
+  $('extras-list').innerHTML = extras.map(x => `
+    <div class="extra">
+      <div><h3>${x.name}</h3><p>${x.desc}</p></div>
+      <div class="end"><span class="p">${brl(x.price)}</span><button class="btn btn-ghost btn-sm" data-extra="${x.id}" aria-pressed="false" type="button">Adicionar</button></div>
+    </div>`).join('');
+
+  function sync(){
+    document.querySelectorAll('[data-plan]').forEach(b => {
+      const on = state.plan === b.dataset.plan, p = plans.find(x => x.id === b.dataset.plan);
+      b.setAttribute('aria-pressed', on); b.textContent = on ? 'Plano escolhido ✓' : 'Escolher ' + p.name;
+    });
+    document.querySelectorAll('[data-extra]').forEach(b => {
+      const on = state.extras.has(b.dataset.extra);
+      b.setAttribute('aria-pressed', on); b.textContent = on ? 'Adicionado ✓' : 'Adicionar';
+    });
+    $('count').textContent = (state.plan ? 1 : 0) + state.extras.size;
+    renderLines();
+  }
+
+  function selected(){
+    const list = [];
+    const p = plans.find(x => x.id === state.plan);
+    if(p) list.push({key:'plan', name:'Plano ' + p.name, sub:p.days, price:p.price});
+    extras.filter(x => state.extras.has(x.id)).forEach(x => list.push({key:x.id, name:x.name, sub:'Extra', price:x.price}));
+    return list;
+  }
+  function renderLines(){
+    const list = selected(), total = list.reduce((s,l) => s + l.price, 0);
+    $('lines').innerHTML = list.length
+      ? list.map(l => `<div class="line"><div>${l.name}<small>${l.sub}</small></div><div style="text-align:right">${brl(l.price)}<br><button type="button" data-rm="${l.key}">remover</button></div></div>`).join('') + `<div class="total"><span>Total</span><b>${brl(total)}</b></div>`
+      : '<p class="empty">Seu pedido está vazio. Escolha um plano para começar.</p>';
+  }
+
+  document.addEventListener('click', e => {
+    const pl = e.target.closest('[data-plan]'), ex = e.target.closest('[data-extra]'), rm = e.target.closest('[data-rm]');
+    if(pl){ state.plan = state.plan === pl.dataset.plan ? null : pl.dataset.plan; sync(); if(state.plan) openCart(); }
+    else if(ex){ const id = ex.dataset.extra; state.extras.has(id) ? state.extras.delete(id) : state.extras.add(id); sync(); }
+    else if(rm){ rm.dataset.rm === 'plan' ? state.plan = null : state.extras.delete(rm.dataset.rm); sync(); }
+  });
+
+  // gaveta do pedido
+  let lastFocus;
+  function openCart(){ lastFocus = document.activeElement; $('overlay').hidden = $('drawer').hidden = false; document.body.classList.add('lock'); $('close-cart').focus(); }
+  function closeCart(){ $('overlay').hidden = $('drawer').hidden = true; document.body.classList.remove('lock'); if(lastFocus) lastFocus.focus(); }
+  $('open-cart').addEventListener('click', openCart);
+  $('close-cart').addEventListener('click', closeCart);
+  $('overlay').addEventListener('click', closeCart);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('drawer').hidden) closeCart(); });
+
+  // enviar pedido
+  $('send').addEventListener('click', () => {
+    const name = $('f-name').value.trim(), tel = $('f-tel').value.replace(/\D/g,''), err = $('err');
+    if(!state.plan) return err.textContent = 'Escolha um plano antes de enviar o pedido.';
+    if(!name) { $('f-name').focus(); return err.textContent = 'Informe seu nome.'; }
+    if(tel.length < 10) { $('f-tel').focus(); return err.textContent = 'Informe um WhatsApp com DDD, como (85) 90000-0000.'; }
+    err.textContent = '';
+    const list = selected(), total = list.reduce((s,l) => s + l.price, 0), biz = $('f-biz').value.trim(), obs = $('f-obs').value.trim();
+    const dados = [`Nome: ${name}`, biz ? `Empresa: ${biz}` : '', `WhatsApp: ${$('f-tel').value.trim()}`, obs ? `Observações: ${obs}` : ''].filter(Boolean);
+    const msg = ['Olá! Quero fazer um pedido pelo site da Ryan_next_tech:', '',
+      ...list.map(l => `• ${l.name} — ${brl(l.price)}`), '', `Total: ${brl(total)}`, '', ...dados].join('\n');
+    window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+  });
+  sync();
+</script>
+</body>
+</html>
