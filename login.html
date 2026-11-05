@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Área do Cliente — Ryan_next_tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#FFFFFF; --ink-soft:#D8DDE5; --paper:#000000; --paper-line:#232323;
+  --dark-bg:#070707; --green:#22C55E; --green-deep:#16A34A; --brass:#4ADE80; --brass-soft:#86EFAC;
+  --gray:#9AA0A8; --radius:2px; --maxw:760px;
+  --err:#F87171;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){ --paper:#000000; } }
+*{box-sizing:border-box;}
+html{height:100%;}
+body{
+  margin:0; min-height:100%; background:var(--paper); color:var(--ink);
+  font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;letter-spacing:-0.01em;color:var(--ink);}
+.mono{font-family:'IBM Plex Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;font-size:12px;}
+a{color:inherit;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+header{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:10;
+  background:rgba(0,0,0,0.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--paper-line);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:var(--maxw);margin:0 auto;}
+.brand-mark{font-family:'Fraunces',serif;font-weight:700;font-size:19px;}
+.brand-mark em{font-style:normal;color:var(--green);}
+#sair-btn{display:none;}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 20px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+  border-radius:var(--radius);cursor:pointer;border:1px solid var(--ink);background:none;color:var(--ink);
+  transition:all .2s ease;
+}
+.btn-primary{background:var(--green);color:#000;border-color:var(--green);}
+.btn-primary:hover{background:var(--green-deep);border-color:var(--green-deep);}
+.btn-ghost:hover{background:var(--ink);color:#000;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+main{padding:56px 0 80px;}
+.card{border:1px solid var(--paper-line);background:#070707;padding:34px 30px;}
+
+/* login */
+#tela-login{max-width:420px;margin:0 auto;}
+.eyebrow{color:var(--green);margin-bottom:14px;display:block;}
+#tela-login h1{font-size:clamp(26px,5vw,32px);margin-bottom:10px;}
+#tela-login p.lead{color:var(--gray);margin-bottom:28px;font-size:15px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;}
+.field input,.field select{
+  width:100%;background:#0d0d0d;border:1px solid #262626;color:#fff;
+  padding:12px 13px;font-family:'Inter',sans-serif;font-size:14.5px;border-radius:var(--radius);
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--green);}
+.form-msg{font-size:13px;margin-top:14px;min-height:18px;}
+.form-msg.err{color:var(--err);}
+.form-msg.ok{color:var(--green);}
+.switch-mode{margin-top:22px;font-size:13.5px;color:var(--gray);text-align:center;}
+.switch-mode button{background:none;border:none;color:var(--green);cursor:pointer;font-size:13.5px;text-decoration:underline;padding:0;font-family:inherit;}
+.demo-hint{margin-top:24px;font-size:12px;color:#7a7a7a;line-height:1.7;border-top:1px solid var(--paper-line);padding-top:16px;}
+.demo-hint b{color:var(--ink-soft);}
+
+/* dashboard */
+#tela-dashboard{display:none;}
+.dash-head{margin-bottom:36px;}
+.dash-head .mono{color:var(--brass-soft);display:block;margin-bottom:10px;}
+.dash-head h1{font-size:clamp(24px,4vw,30px);margin-bottom:6px;}
+.dash-head p{color:var(--gray);font-size:14.5px;}
+
+.stages{border:1px solid var(--paper-line);margin-bottom:24px;}
+.stage{display:flex;gap:18px;padding:22px 24px;border-bottom:1px solid var(--paper-line);align-items:flex-start;}
+.stage:last-child{border-bottom:none;}
+.stage .dot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--paper-line);flex-shrink:0;margin-top:5px;}
+.stage.done .dot{background:var(--green);border-color:var(--green);}
+.stage.current .dot{background:var(--brass-soft);border-color:var(--brass-soft);}
+.stage h3{font-size:16px;margin-bottom:4px;}
+.stage.done h3{color:var(--green);}
+.stage.current h3{color:var(--brass-soft);}
+.stage p{color:var(--gray);font-size:13.5px;margin:0;}
+.stage .badge{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gray);text-transform:uppercase;margin-left:auto;flex-shrink:0;padding-top:2px;}
+.stage.current .badge{color:var(--brass-soft);}
+.stage.done .badge{color:var(--green);}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--paper-line);border:1px solid var(--paper-line);margin-bottom:24px;}
+.info-cell{background:#070707;padding:20px 22px;}
+.info-cell .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:block;}
+.info-cell .v{font-family:'Fraunces',serif;font-size:22px;color:var(--ink);}
+
+.msg-section h3{font-size:15px;margin-bottom:14px;}
+.msg-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;max-height:220px;overflow-y:auto;}
+.msg-item{border:1px solid var(--paper-line);padding:12px 14px;font-size:13.5px;color:var(--ink-soft);}
+.msg-item .when{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#7a7a7a;margin-top:6px;}
+.msg-empty{color:#7a7a7a;font-size:13px;}
+textarea#nova-msg{
+  width:100%;background:#0d0d0d;border:1px solid #262626;color:#fff;padding:12px 13px;
+  font-family:'Inter',sans-serif;font-size:14px;border-radius:var(--radius);resize:vertical;min-height:70px;margin-bottom:12px;
+}
+textarea#nova-msg:focus{outline:none;border-color:var(--green);}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <span class="brand-mark">Ryan<em>_next_tech</em></span>
+    <button class="btn btn-ghost" id="sair-btn" onclick="sair()">Sair</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- LOGIN / CADASTRO -->
+  <div id="tela-login">
+    <span class="mono eyebrow">Área do cliente</span>
+    <h1 id="form-title">Acompanhe seu projeto</h1>
+    <p class="lead" id="form-lead">Entre com o e-mail e a senha cadastrados com a Ryan_next_tech.</p>
+
+    <div class="card">
+      <form id="login-form" onsubmit="return fazerLogin(event)">
+        <div class="field">
+          <label for="login-email">E-mail</label>
+          <input id="login-email" type="email" required placeholder="voce@empresa.com.br">
+        </div>
+        <div class="field">
+          <label for="login-senha">Senha</label>
+          <input id="login-senha" type="password" required placeholder="••••••">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Entrar</button>
+        <p class="form-msg" id="login-msg"></p>
+      </form>
+
+      <form id="cadastro-form" style="display:none;" onsubmit="return fazerCadastro(event)">
+        <div class="field">
+          <label for="cad-empresa">Nome da empresa</label>
+          <input id="cad-empresa" type="text" required placeholder="Nome da sua empresa">
+        </div>
+        <div class="field">
+          <label for="cad-contato">Seu nome</label>
+          <input id="cad-contato" type="text" required placeholder="Seu nome">
+        </div>
+        <div class="field">
+          <label for="cad-email">E-mail</label>
+          <input id="cad-email" type="email" required placeholder="voce@empresa.com.br">
+        </div>
+        <div class="field">
+          <label for="cad-senha">Crie uma senha</label>
+          <input id="cad-senha" type="password" required placeholder="••••••" minlength="4">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Criar acesso</button>
+        <p class="form-msg" id="cadastro-msg"></p>
+      </form>
+
+      <p class="switch-mode">
+        <span id="txt-login-mode">Ainda não tem acesso? <button type="button" onclick="alternarModo('cadastro')">Criar acesso</button></span>
+        <span id="txt-cadastro-mode" style="display:none;">Já tem acesso? <button type="button" onclick="alternarModo('login')">Entrar</button></span>
+      </p>
+
+      <p class="demo-hint">
+        <b>Contas de demonstração</b> (senha: 1234):<br>
+        contato@clinicaboavista.com.br · contato@padariaesperanca.com.br · contato@mirandaadv.com.br
+      </p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="tela-dashboard">
+    <div class="dash-head">
+      <span class="mono">Bem-vindo(a) de volta</span>
+      <h1 id="dash-empresa">—</h1>
+      <p id="dash-saudacao">—</p>
+    </div>
+
+    <div class="stages" id="stages-container"></div>
+
+    <div class="info-grid">
+      <div class="info-cell">
+        <span class="k">Progresso</span>
+        <span class="v" id="dash-progresso">0%</span>
+      </div>
+      <div class="info-cell">
+        <span class="k">Entrega prevista</span>
+        <span class="v" id="dash-prazo">—</span>
+      </div>
+    </div>
+
+    <div class="card msg-section">
+      <h3>Mensagens com a Ryan_next_tech</h3>
+      <div class="msg-list" id="msg-list"></div>
+      <textarea id="nova-msg" placeholder="Escreva uma mensagem, dúvida ou pedido sobre o projeto..."></textarea>
+      <button class="btn btn-primary" onclick="enviarMensagem()">Enviar mensagem</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const ETAPAS = [
+  {tag:'Fundação', titulo:'Planejamento', desc:'Entendimento do negócio, concorrentes e necessidades do cliente.'},
+  {tag:'Estrutura', titulo:'Construção', desc:'Páginas, textos e formulários sobre base técnica rápida e responsiva.'},
+  {tag:'Acabamento', titulo:'Refinamento e entrega', desc:'Ajustes finos, testes em diferentes telas e treinamento da equipe.'}
+];
+
+const DEMO_CONTAS = [
+  {email:'contato@clinicaboavista.com.br', senha:'1234', empresa:'Clínica Boa Vista', contato:'Juliana Boavista', etapa:1, prazo:'2026-10-05'},
+  {email:'contato@padariaesperanca.com.br', senha:'1234', empresa:'Padaria Esperança', contato:'Carlos Esperança', etapa:2, prazo:'2026-09-20'},
+  {email:'contato@mirandaadv.com.br', senha:'1234', empresa:'Miranda Advocacia', contato:'Renata Miranda', etapa:0, prazo:'2026-10-15'}
+];
+
+function lerContas(){
+  try{
+    const raw = localStorage.getItem('rnt_contas');
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function salvarContas(contas){
+  try{ localStorage.setItem('rnt_contas', JSON.stringify(contas)); }catch(e){}
+}
+function todasContas(){
+  return DEMO_CONTAS.concat(lerContas());
+}
+function lerMensagens(email){
+  try{
+    const raw = localStorage.getItem('rnt_msgs_'+email);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function salvarMensagens(email, msgs){
+  try{ localStorage.setItem('rnt_msgs_'+email, JSON.stringify(msgs)); }catch(e){}
+}
+
+function alternarModo(modo){
+  const isCad = modo === 'cadastro';
+  document.getElementById('login-form').style.display = isCad ? 'none' : 'block';
+  document.getElementById('cadastro-form').style.display = isCad ? 'block' : 'none';
+  document.getElementById('txt-login-mode').style.display = isCad ? 'none' : 'inline';
+  document.getElementById('txt-cadastro-mode').style.display = isCad ? 'inline' : 'none';
+  document.getElementById('form-title').textContent = isCad ? 'Criar seu acesso' : 'Acompanhe seu projeto';
+  document.getElementById('form-lead').textContent = isCad
+    ? 'Cadastre-se para acompanhar o andamento do seu site.'
+    : 'Entre com o e-mail e a senha cadastrados com a Ryan_next_tech.';
+}
+
+function fazerLogin(e){
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const senha = document.getElementById('login-senha').value;
+  const msgEl = document.getElementById('login-msg');
+  fetch('authryan.php', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({acao:'login', email, senha})
+  }).then(r => r.json()).then(resposta => {
+    if(!resposta.ok) throw new Error(resposta.mensagem);
+    msgEl.textContent = '';
+    try{ localStorage.setItem('rnt_sessao', email); }catch(err){}
+    abrirDashboard(resposta.usuario);
+  }).catch(erro => {
+    msgEl.textContent = erro.message || 'Não foi possível entrar.';
+    msgEl.className = 'form-msg err';
+  });
+  return false;
+}
+
+function fazerCadastro(e){
+  e.preventDefault();
+  const empresa = document.getElementById('cad-empresa').value.trim();
+  const contato = document.getElementById('cad-contato').value.trim();
+  const email = document.getElementById('cad-email').value.trim().toLowerCase();
+  const senha = document.getElementById('cad-senha').value;
+  const msgEl = document.getElementById('cadastro-msg');
+
+  fetch('authryan.php', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({acao:'cadastro', empresa, nome:contato, email, senha})
+  }).then(r => r.json()).then(resposta => {
+    if(!resposta.ok) throw new Error(resposta.mensagem);
+    msgEl.textContent = 'Conta criada! Entrando...';
+    msgEl.className = 'form-msg ok';
+    try{ localStorage.setItem('rnt_sessao', email); }catch(err){}
+    setTimeout(()=> abrirDashboard(resposta.usuario), 500);
+  }).catch(erro => {
+    msgEl.textContent = erro.message || 'Não foi possível criar a conta.';
+    msgEl.className = 'form-msg err';
+  });
+  return false;
+}
+
+function formatarData(iso){
+  if(!iso) return 'A combinar';
+  const d = new Date(iso+'T00:00:00');
+  if(isNaN(d)) return 'A combinar';
+  return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'long', year:'numeric'});
+}
+
+function diasRestantes(iso){
+  if(!iso) return null;
+  const alvo = new Date(iso+'T00:00:00');
+  if(isNaN(alvo)) return null;
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  return Math.round((alvo - hoje) / 86400000);
+}
+
+function renderStages(etapaAtual){
+  const cont = document.getElementById('stages-container');
+  cont.innerHTML = '';
+  ETAPAS.forEach((et, i) => {
+    const status = i < etapaAtual ? 'done' : (i === etapaAtual ? 'current' : '');
+    const badge = i < etapaAtual ? 'Concluída' : (i === etapaAtual ? 'Em andamento' : 'Pendente');
+    const div = document.createElement('div');
+    div.className = 'stage ' + status;
+    div.innerHTML = `<span class="dot"></span>
+      <div><h3>${et.tag} — ${et.titulo}</h3><p>${et.desc}</p></div>
+      <span class="badge">${badge}</span>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderMensagens(email){
+  const lista = document.getElementById('msg-list');
+  const msgs = lerMensagens(email);
+  if(msgs.length === 0){
+    lista.innerHTML = '<p class="msg-empty">Nenhuma mensagem ainda. Escreva abaixo para falar com a equipe.</p>';
+    return;
+  }
+  lista.innerHTML = msgs.map(m =>
+    `<div class="msg-item">${m.texto}<span class="when">${m.quando}</span></div>`
+  ).reverse().join('');
+}
+
+function enviarMensagem(){
+  const email = document.body.dataset.emailAtual;
+  if(!email) return;
+  const campo = document.getElementById('nova-msg');
+  const texto = campo.value.trim();
+  if(!texto) return;
+  const msgs = lerMensagens(email);
+  msgs.push({texto, quando: new Date().toLocaleString('pt-BR')});
+  salvarMensagens(email, msgs);
+  campo.value = '';
+  renderMensagens(email);
+}
+
+function abrirDashboard(conta){
+  document.body.dataset.emailAtual = conta.email;
+  document.getElementById('tela-login').style.display = 'none';
+  document.getElementById('tela-dashboard').style.display = 'block';
+  document.getElementById('sair-btn').style.display = 'inline-flex';
+
+  document.getElementById('dash-empresa').textContent = conta.empresa || 'Seu projeto';
+  document.getElementById('dash-saudacao').textContent = conta.contato
+    ? `Olá, ${conta.contato}. Aqui está o andamento do seu site.`
+    : 'Aqui está o andamento do seu site.';
+
+  const etapa = typeof conta.etapa === 'number' ? conta.etapa : 0;
+  renderStages(etapa);
+
+  const pct = Math.round(((etapa + 0.5) / ETAPAS.length) * 100);
+  document.getElementById('dash-progresso').textContent = pct + '%';
+
+  const dias = diasRestantes(conta.prazo);
+  const prazoEl = document.getElementById('dash-prazo');
+  if(conta.prazo && dias !== null){
+    prazoEl.textContent = formatarData(conta.prazo);
+    prazoEl.title = dias >= 0 ? `${dias} dia(s) restante(s)` : 'Prazo encerrado';
+  } else {
+    prazoEl.textContent = 'A combinar';
+  }
+
+  renderMensagens(conta.email);
+}
+
+function sair(){
+  try{ localStorage.removeItem('rnt_sessao'); }catch(e){}
+  document.body.dataset.emailAtual = '';
+  document.getElementById('tela-dashboard').style.display = 'none';
+  document.getElementById('sair-btn').style.display = 'none';
+  document.getElementById('tela-login').style.display = 'block';
+  document.getElementById('login-form').reset();
+  document.getElementById('login-msg').textContent = '';
+  alternarModo('login');
+}
+
+// restaurar sessão, se existir
+(function(){
+  try{
+    const email = localStorage.getItem('rnt_sessao');
+    if(email){
+      const conta = todasContas().find(c => c.email.toLowerCase() === email.toLowerCase());
+      if(conta){ abrirDashboard(conta); return; }
+    }
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>
