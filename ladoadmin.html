@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Painel administrativo — Ryan_next_tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#000;--panel:#080808;--panel2:#0d0d0d;--line:#232323;--line2:#2f2f2f;
+  --ink:#fff;--soft:#D8DDE5;--gray:#9AA0A8;--dim:#6f757d;
+  --green:#22C55E;--green-deep:#16A34A;--green-soft:#86EFAC;
+  --amber:#E5B93C;--red:#EF5B5B;--blue:#8AA4C8;
+  --r:2px;
+  --serif:'Fraunces',Georgia,serif;--sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;margin:0;letter-spacing:-.01em}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+small{color:var(--gray)}
+.mono{font-family:var(--mono)}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.side{border-right:1px solid var(--line);padding:22px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:22px;overflow:auto;background:var(--paper)}
+.brand-mark{font-family:var(--serif);font-weight:700;font-size:21px}
+.brand-mark em{font-style:normal;color:var(--green)}
+.brand-sub{display:block;font:11px var(--mono);color:var(--dim);margin-top:2px}
+.side nav{display:flex;flex-direction:column;gap:2px}
+.side .grp{font-size:12px;color:var(--dim);margin:16px 10px 6px}
+.side .nv{display:block;width:100%;text-align:left;background:none;border:0;border-left:2px solid transparent;color:var(--soft);padding:9px 10px;cursor:pointer;border-radius:0}
+.side .nv:hover{background:var(--panel2);color:#fff}
+.side .nv.on{border-left-color:var(--green);background:var(--panel2);color:#fff;font-weight:600}
+.side-f{margin-top:auto;font-size:12px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px}
+.main{min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 32px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);z-index:20}
+.top h1{font-size:26px}
+.who{display:flex;align-items:center;gap:16px;text-align:right}
+.who b{display:block;font-size:14px;line-height:1.2}
+.who small{font-size:12px}
+#view{padding:28px 32px 60px;max-width:1280px}
+
+/* ---------- controls ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:var(--r);border:1px solid transparent;cursor:pointer;font-weight:600;font-size:14px;transition:background .15s,color .15s,border-color .15s;white-space:nowrap}
+.btn.pri{background:var(--green);color:#000}.btn.pri:hover{background:var(--green-deep)}
+.btn.ghost{border-color:var(--line2);color:var(--soft);background:none}.btn.ghost:hover{border-color:var(--ink);color:#fff}
+.btn.danger{border-color:#5a2424;color:var(--red);background:none}.btn.danger:hover{background:var(--red);color:#000;border-color:var(--red)}
+.btn.sm{padding:6px 11px;font-size:13px}
+.btn.dis{opacity:.45;cursor:not-allowed}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.fld label,.lbl{display:block;font-size:13px;color:var(--gray);margin-bottom:6px}
+input[type=text],input[type=email],input[type=password],input[type=number],input[type=date],input[type=search],select,textarea{width:100%;background:var(--panel2);border:1px solid var(--line2);border-radius:var(--r);padding:10px 12px;color:#fff;min-height:42px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green)}
+textarea{min-height:90px;resize:vertical}
+select option{background:#111}
+input[type=checkbox]{accent-color:var(--green);width:16px;height:16px;margin:0}
+.grid2{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+.grid2 .full{grid-column:1/-1}
+.toolbar{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.toolbar .l{display:flex;gap:12px;align-items:end;flex-wrap:wrap}
+.lead{color:var(--gray);max-width:620px;margin:6px 0 0}
+
+/* ---------- filters ---------- */
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:16px;border:1px solid var(--line);background:var(--panel);margin-bottom:22px;align-items:end}
+.filters .cust{display:grid;grid-template-columns:1fr 1fr;gap:8px;grid-column:span 2}
+.filters .actions{display:flex;justify-content:flex-end}
+
+/* ---------- panels ---------- */
+.panel{border:1px solid var(--line);background:var(--panel);padding:20px}
+.panel h3{font-size:17px;margin-bottom:4px}
+.panel .sub{color:var(--gray);font-size:13px;margin:0 0 16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:22px}
+.kpi{background:var(--paper);padding:20px}
+.kpi .k{font-size:13px;color:var(--gray)}
+.kpi .v{font-family:var(--serif);font-size:27px;font-weight:600;margin:4px 0 2px;line-height:1.15}
+.kpi .s{font-size:12.5px;color:var(--dim)}
+.kpi.g .v{color:var(--green)}.kpi.a .v{color:var(--amber)}.kpi.r .v{color:var(--red)}.kpi.b .v{color:var(--blue)}
+.charts{display:grid;gap:18px;grid-template-columns:repeat(2,1fr)}
+.charts .wide{grid-column:1/-1}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px;font-size:13px;color:var(--soft)}
+.sw{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:baseline}
+svg.ch{width:100%;height:auto;display:block}
+.ax{fill:#9AA0A8;font:10px var(--mono)}
+.gl{stroke:#232323;stroke-width:1}
+.donut{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.donut svg{width:170px;height:170px;flex:none}
+.dl{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:13.5px;flex:1;min-width:170px}
+.dl li{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.dl .n{color:var(--soft)}.dl .p{color:var(--gray);font:12px var(--mono)}
+.hb{display:grid;grid-template-columns:minmax(90px,1.1fr) 2fr auto;gap:12px;align-items:center;padding:7px 0;font-size:13.5px}
+.hb-l{color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-t{height:8px;background:#141414;display:block}
+.hb-t i{display:block;height:100%;background:var(--green)}
+.hb-v{font:12.5px var(--mono);color:var(--gray)}
+.empty{padding:36px 16px;text-align:center;color:var(--gray);border:1px dashed var(--line2)}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;border:1px solid var(--line)}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:760px}
+.tbl th{font-weight:500;font-size:12.5px;color:var(--gray);text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--panel);white-space:nowrap}
+.tbl th button{background:none;border:0;color:inherit;cursor:pointer;padding:0;font:inherit}
+.tbl th button:hover{color:#fff}
+.tbl td{padding:12px 14px;border-bottom:1px solid #151515;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr.row{cursor:pointer}
+.tbl tbody tr.row:hover td{background:var(--panel2)}
+.tbl .num{text-align:right;font-family:var(--mono);white-space:nowrap}
+.tbl .acts{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;white-space:nowrap}
+.chip::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--c,#888)}
+.tag{display:inline-block;border:1px solid var(--line2);padding:2px 8px;font-size:12px;color:var(--soft)}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;font-size:13px;color:var(--gray);flex-wrap:wrap}
+.pager .b{display:flex;gap:8px}
+.sum{display:flex;gap:28px;flex-wrap:wrap;margin:0 0 14px;font-size:13.5px;color:var(--gray)}
+.sum b{color:#fff;font-family:var(--mono);font-weight:500}
+
+/* ---------- roles ---------- */
+.rgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.rcard{border:1px solid var(--line);background:var(--panel);padding:20px;display:flex;flex-direction:column;gap:12px}
+.rcard h3{font-size:18px}
+.rcard p{margin:0;color:var(--gray);font-size:13.5px}
+.rcard ul{list-style:none;margin:0;padding:0;font-size:13px;color:var(--soft);display:grid;gap:3px}
+.rcard li span{color:var(--dim);font-family:var(--mono)}
+.rcard .f{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.mrow{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.mrow strong{font-size:14px}
+.mchecks{display:flex;flex-wrap:wrap;gap:8px 18px}
+.mchecks label{display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--soft);margin:0;cursor:pointer}
+.conf{border:1px solid var(--line2);padding:12px 14px;font-size:13.5px;margin-top:12px}
+.conf.ok{border-color:#14532d;color:var(--green-soft)}
+.conf.bad{border-color:#5a2424;color:#ffb4b4}
+.conf ul{margin:6px 0 0;padding-left:18px}
+
+/* ---------- modal / toast ---------- */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow:auto;z-index:100}
+.md{background:var(--panel);border:1px solid var(--line2);width:100%;max-width:640px}
+.md.lg{max-width:820px}
+.md-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.md-h h3{font-size:19px}
+.x{background:none;border:0;color:var(--gray);font-size:26px;line-height:1;cursor:pointer;padding:0 4px}
+.x:hover{color:#fff}
+.md-b{padding:20px}
+.md-f{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+.err{color:#ffb4b4;font-size:13.5px;margin-top:12px;min-height:0}
+.err:empty{display:none}
+.tl{list-style:none;margin:0;padding:0;border-left:1px solid var(--line2)}
+.tl li{padding:0 0 14px 16px;position:relative;font-size:14px}
+.tl li::before{content:'';position:absolute;left:-4px;top:7px;width:7px;height:7px;background:var(--green)}
+.tl small{display:block}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin-bottom:20px}
+.dgrid dt{font-size:12.5px;color:var(--gray)}.dgrid dd{margin:0;font-size:14.5px}
+#toast{position:fixed;right:20px;bottom:20px;z-index:200;display:grid;gap:8px}
+.t{background:#0d1a11;border:1px solid #14532d;padding:12px 16px;font-size:14px;max-width:360px}
+.t.bad{background:#1a0d0d;border-color:#5a2424}
+
+/* ---------- acessibilidade ---------- */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- responsive ---------- */
+@media(max-width:960px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:column;gap:12px;border-right:0;border-bottom:1px solid var(--line);padding:16px}
+  .side nav{flex-direction:row;overflow-x:auto;gap:4px}
+  .side .grp,.side-f{display:none}
+  .side .nv{width:auto;white-space:nowrap;border-left:0;border-bottom:2px solid transparent}
+  .side .nv.on{border-bottom-color:var(--green)}
+  .top{position:static;padding:16px 18px}
+  #view{padding:20px 18px 50px}
+  .charts{grid-template-columns:1fr}
+  .filters .cust{grid-column:auto}
+  .grid2,.dgrid{grid-template-columns:1fr}
+  .mrow{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="toast" aria-live="polite"></div>
+<noscript><p style="padding:24px">Este painel precisa de JavaScript ativado.</p></noscript>
+
+<script>
+(function(){
+'use strict';
+
+/* =====================================================================
+   Utilitários
+   ===================================================================== */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=(n,l=2)=>String(n).padStart(l,'0');
+const isoDate=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const TODAY=isoDate(new Date());
+const parseD=s=>{const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const addDays=(s,n)=>{const d=parseD(s);d.setDate(d.getDate()+n);return isoDate(d)};
+const addMonths=(s,n)=>{const d=parseD(s);d.setDate(1);d.setMonth(d.getMonth()+n);return isoDate(d)};
+const daysBetween=(a,b)=>Math.round((parseD(b)-parseD(a))/864e5);
+const fmtD=s=>s?s.split('-').reverse().join('/'):'—';
+const BRL=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const short=v=>v>=1e6?(v/1e6).toLocaleString('pt-BR',{maximumFractionDigits:1})+' mi':v>=1e3?(v/1e3).toLocaleString('pt-BR',{maximumFractionDigits:1})+' mil':String(Math.round(v));
+const fmtDT=t=>new Date(t).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+const MES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const fnum=id=>'FAT-'+pad(id,4);
+/* =====================================================================
+   Permissões e segregação de funções
+   ===================================================================== */
+const MODS=[
+  {id:'dashboard',nome:'Dashboard',acoes:[['ver','Visualizar']]},
+  {id:'faturamento',nome:'Faturamento',acoes:[['ver','Visualizar'],['criar','Emitir fatura'],['editar','Editar fatura'],['cancelar','Cancelar fatura'],['aprovar','Aprovar emissão'],['baixar','Registrar pagamento'],['exportar','Exportar CSV']]},
+  {id:'clientes',nome:'Clientes',acoes:[['ver','Visualizar'],['criar','Cadastrar'],['editar','Editar'],['excluir','Excluir']]},
+  {id:'usuarios',nome:'Usuários',acoes:[['ver','Visualizar'],['criar','Cadastrar'],['editar','Editar'],['desativar','Ativar/desativar']]},
+  {id:'papeis',nome:'Perfis',acoes:[['ver','Visualizar'],['editar','Criar e editar perfis']]},
+  {id:'auditoria',nome:'Auditoria',acoes:[['ver','Visualizar']]}
+];
+const ALL_PERMS=MODS.flatMap(m=>m.acoes.map(a=>m.id+'.'+a[0]));
+const CONFLITOS=[
+  {a:['faturamento.criar','faturamento.editar'],b:['faturamento.aprovar'],msg:'Quem emite ou edita faturas não pode aprovar a emissão.'},
+  {a:['faturamento.aprovar'],b:['faturamento.baixar'],msg:'Quem aprova a fatura não pode registrar o pagamento dela.'},
+  {a:['faturamento.criar','faturamento.editar'],b:['faturamento.baixar'],msg:'Quem emite faturas não pode dar baixa nos pagamentos.'},
+  {a:['usuarios.criar','usuarios.editar','usuarios.desativar','papeis.editar'],b:['faturamento.criar','faturamento.editar','faturamento.cancelar','faturamento.aprovar','faturamento.baixar'],msg:'Quem gerencia acessos não pode operar o faturamento.'}
+];
+function conflitos(perms){const s=new Set(perms);return CONFLITOS.filter(c=>c.a.some(p=>s.has(p))&&c.b.some(p=>s.has(p)))}
+
+/* =====================================================================
+  Dados carregados do banco pelo PHP
+  ===================================================================== */
+const SERVICOS=[['Site institucional',4200],['Loja virtual',7800],['Manutenção mensal',650],['Hospedagem anual',480],['Identidade visual',1900],['SEO e conteúdo',1200]];
+const PAGTOS=['Pix','Boleto','Cartão de crédito'];
+const STATUS={
+  aguardando:{l:'Aguardando aprovação',c:'#8AA4C8'},
+  receber:{l:'A receber',c:'#E5B93C'},
+  vencida:{l:'Vencida',c:'#EF5B5B'},
+  paga:{l:'Paga',c:'#22C55E'},
+  cancelada:{l:'Cancelada',c:'#6b7280'}
+};
+
+let db={v:1,roles:[],users:[],clientes:[],invoices:[],seq:1,log:[]};
+let saveQueue=Promise.resolve();
+const save=()=>{
+  saveQueue=saveQueue.then(async()=>{
+    const response=await fetch(window.ADMIN_API_URL,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':window.ADMIN_CSRF},body:JSON.stringify({clientes:db.clientes,invoices:db.invoices})});
+    if(!response.ok)throw new Error('Não foi possível salvar no banco.');
+  }).catch(error=>toast(error.message||'Falha ao salvar os dados.',true));
+  return saveQueue;
+};
+const role=id=>db.roles.find(r=>r.id===id);
+const userById=id=>db.users.find(u=>u.id===id);
+const uname=id=>{const u=userById(id);return u?u.nome:'Usuário removido'};
+const cname=id=>{const c=db.clientes.find(x=>x.id===id);return c?c.nome:'—'};
+const permsOf=u=>new Set((u&&u.ativo&&role(u.roleId)?role(u.roleId).perms:[])||[]);
+
+let ME=null;
+const can=p=>!!ME&&permsOf(ME).has(p);
+function log(mod,det){
+  db.log.push({t:Date.now(),u:ME?ME.id:null,n:ME?ME.nome:'Sistema',a:mod,d:det});
+  if(db.log.length>400)db.log=db.log.slice(-400);
+}
+function lockout(users,roles){
+  const has=p=>users.some(u=>u.ativo&&((roles.find(r=>r.id===u.roleId)||{perms:[]}).perms).includes(p));
+  return !(has('papeis.editar')&&has('usuarios.editar'));
+}
+
+/* =====================================================================
+   Estado de interface
+   ===================================================================== */
+const root=$('#root');
+const NAV=[
+  {id:'dashboard',label:'Dashboard',perm:'dashboard.ver',g:'Visão geral'},
+  {id:'faturamento',label:'Faturamento',perm:'faturamento.ver',g:'Financeiro'},
+  {id:'clientes',label:'Clientes',perm:'clientes.ver',g:'Cadastros'}
+];
+const PRESETS=[['30d','Últimos 30 dias'],['90d','Últimos 90 dias'],['12m','Últimos 12 meses'],['ano','Ano atual'],['tudo','Todo o período'],['custom','Personalizado']];
+const defaultF=()=>({preset:'12m',de:'',ate:'',status:'',cliente:'',servico:'',pagto:'',min:'',max:'',q:''});
+const ui={view:null,page:1,sort:{k:'emissao',d:-1},f:defaultF(),cq:'',aq:'',au:''};
+
+function toast(msg,bad){
+  const t=document.createElement('div');t.className='t'+(bad?' bad':'');t.textContent=msg;
+  $('#toast').appendChild(t);setTimeout(()=>t.remove(),4200);
+}
+function need(p){if(can(p))return true;toast('Seu perfil não tem permissão para esta ação.',true);return false}
+
+/* =====================================================================
+   Modal
+   ===================================================================== */
+function closeModal(){const m=$('#modal');if(m)m.remove()}
+function modal(o){
+  closeModal();
+  const m=document.createElement('div');m.className='ov';m.id='modal';
+  m.innerHTML='<div class="md'+(o.lg?' lg':'')+'" role="dialog" aria-modal="true" aria-label="'+esc(o.title)+'">'
+    +'<div class="md-h"><h3>'+esc(o.title)+'</h3><button type="button" class="x" data-act="closeModal" aria-label="Fechar">&times;</button></div>'
+    +'<form class="md-b" novalidate>'+o.body+'<div class="err" id="merr" role="alert"></div>'
+    +'<div class="md-f">'+(o.noSubmit?'<button type="button" class="btn ghost" data-act="closeModal">Fechar</button>':'<button type="button" class="btn ghost" data-act="closeModal">Cancelar</button><button class="btn pri">'+esc(o.ok||'Salvar')+'</button>')+'</div></form></div>';
+  document.body.appendChild(m);
+  const form=$('form',m);
+  form.addEventListener('submit',e=>{
+    e.preventDefault();if(o.noSubmit)return;
+    const r=o.onSubmit(new FormData(form),form);
+    if(r===true)closeModal();else $('#merr').textContent=r||'Não foi possível salvar.';
+  });
+  if(o.onInput)form.addEventListener('input',e=>o.onInput(form,e));
+  if(o.onOpen)o.onOpen(form);
+  const first=form.querySelector('input:not([type=hidden]),select,textarea');(first||form.querySelector('button')).focus();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+/* =====================================================================
+   Filtros e regras de faturamento
+   ===================================================================== */
+const dispStatus=i=>i.status==='receber'&&i.venc<TODAY?'vencida':i.status;
+function range(){
+  const f=ui.f;
+  switch(f.preset){
+    case '30d':return {de:addDays(TODAY,-29),ate:TODAY};
+    case '90d':return {de:addDays(TODAY,-89),ate:TODAY};
+    case '12m':return {de:addMonths(TODAY,-11),ate:TODAY};
+    case 'ano':return {de:TODAY.slice(0,4)+'-01-01',ate:TODAY};
+    case 'custom':return {de:f.de,ate:f.ate};
+    default:return {de:'',ate:''};
+  }
+}
+function filtered(){
+  const r=range(),f=ui.f,q=f.q.trim().toLowerCase();
+  const mn=f.min!==''?parseFloat(f.min):null,mx=f.max!==''?parseFloat(f.max):null;
+  return db.invoices.filter(i=>{
+    if(r.de&&i.emissao<r.de)return false;
+    if(r.ate&&i.emissao>r.ate)return false;
+    if(f.status&&dispStatus(i)!==f.status)return false;
+    if(f.cliente&&i.cliente!==f.cliente)return false;
+    if(f.servico&&i.servico!==f.servico)return false;
+    if(f.pagto&&i.pagto!==f.pagto)return false;
+    if(mn!==null&&!isNaN(mn)&&i.valor<mn)return false;
+    if(mx!==null&&!isNaN(mx)&&i.valor>mx)return false;
+    if(q&&!(fnum(i.id).toLowerCase().includes(q)||cname(i.cliente).toLowerCase().includes(q)||i.servico.toLowerCase().includes(q)))return false;
+    return true;
+  });
+}
+function sodMsg(i,acao){
+  if(acao==='aprovar'&&i.tocou.includes(ME.id))return 'Você emitiu ou editou esta fatura e não pode aprová-la.';
+  if(acao==='baixar'){
+    if(i.aprovadoPor===ME.id)return 'Você aprovou esta fatura e não pode registrar o pagamento dela.';
+    if(i.tocou.includes(ME.id))return 'Você emitiu esta fatura e não pode dar baixa nela.';
+  }
+  return '';
+}
+
+function filterBar(){
+  const f=ui.f;
+  const opt=(arr,v,all)=>'<option value="">'+all+'</option>'+arr.map(a=>'<option value="'+esc(a[0])+'"'+(a[0]===v?' selected':'')+'>'+esc(a[1])+'</option>').join('');
+  return '<form class="filters" id="filters" onsubmit="return false" aria-label="Filtros de faturamento">'
+   +'<div class="fld"><label for="f-preset">Período</label><select id="f-preset" data-f="preset">'+PRESETS.map(p=>'<option value="'+p[0]+'"'+(p[0]===f.preset?' selected':'')+'>'+p[1]+'</option>').join('')+'</select></div>'
+   +'<div class="cust" id="f-cust"'+(f.preset==='custom'?'':' hidden')+'><div class="fld"><label for="f-de">De</label><input type="date" id="f-de" data-f="de" value="'+esc(f.de)+'"></div><div class="fld"><label for="f-ate">Até</label><input type="date" id="f-ate" data-f="ate" value="'+esc(f.ate)+'"></div></div>'
+   +'<div class="fld"><label for="f-status">Situação</label><select id="f-status" data-f="status">'+opt(Object.keys(STATUS).map(k=>[k,STATUS[k].l]),f.status,'Todas')+'</select></div>'
+   +'<div class="fld"><label for="f-cliente">Cliente</label><select id="f-cliente" data-f="cliente">'+opt(db.clientes.map(c=>[c.id,c.nome]),f.cliente,'Todos')+'</select></div>'
+   +'<div class="fld"><label for="f-servico">Serviço</label><select id="f-servico" data-f="servico">'+opt(SERVICOS.map(s=>[s[0],s[0]]),f.servico,'Todos')+'</select></div>'
+   +'<div class="fld"><label for="f-pagto">Forma de pagamento</label><select id="f-pagto" data-f="pagto">'+opt(PAGTOS.map(p=>[p,p]),f.pagto,'Todas')+'</select></div>'
+   +'<div class="fld"><label for="f-min">Valor mínimo (R$)</label><input type="number" id="f-min" data-f="min" min="0" step="0.01" value="'+esc(f.min)+'"></div>'
+   +'<div class="fld"><label for="f-max">Valor máximo (R$)</label><input type="number" id="f-max" data-f="max" min="0" step="0.01" value="'+esc(f.max)+'"></div>'
+   +'<div class="fld"><label for="f-q">Buscar</label><input type="search" id="f-q" data-f="q" placeholder="Nº, cliente ou serviço" value="'+esc(f.q)+'"></div>'
+   +'<div class="actions"><button type="button" class="btn ghost" data-act="limpar">Limpar filtros</button></div></form>';
+}
+
+/* =====================================================================
+   Gráficos (SVG / HTML puro)
+   ===================================================================== */
+function niceMax(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v)));const n=v/p;return (n<=1?1:n<=2?2:n<=5?5:10)*p}
+function sumBy(a,fn){return a.reduce((s,i)=>s+(fn?fn(i):i.valor),0)}
+
+function monthlyChart(live){
+  const r=range();const ds=live.map(i=>i.emissao).sort();
+  const start=(r.de||ds[0]||TODAY).slice(0,7),end=(r.ate||ds[ds.length-1]||TODAY).slice(0,7);
+  let ms=[];let y=+start.slice(0,4),m=+start.slice(5,7);const ey=+end.slice(0,4),em=+end.slice(5,7);
+  while(y<ey||(y===ey&&m<=em)){ms.push(y+'-'+pad(m));m++;if(m>12){m=1;y++}}
+  if(ms.length>24)ms=ms.slice(-24);
+  const ORD=['paga','receber','vencida','aguardando'];
+  const data=ms.map(k=>{const o={k:k,t:0};ORD.forEach(s=>o[s]=0);live.forEach(i=>{if(i.emissao.slice(0,7)===k){const s=dispStatus(i);o[s]+=i.valor;o.t+=i.valor}});return o});
+  const max=niceMax(Math.max.apply(null,data.map(d=>d.t).concat([0])));
+  const W=720,H=280,x0=58,y0=14,pw=W-x0-12,ph=H-y0-34,step=pw/ms.length,bw=Math.min(44,step*0.62);
+  let g='';
+  for(let t=0;t<=4;t++){const y=y0+ph-ph*t/4;g+='<line class="gl" x1="'+x0+'" x2="'+(W-12)+'" y1="'+y+'" y2="'+y+'"/><text class="ax" x="'+(x0-8)+'" y="'+(y+3)+'" text-anchor="end">'+short(max*t/4)+'</text>'}
+  const every=ms.length>14?2:1;
+  data.forEach((d,idx)=>{
+    const bx=x0+step*idx+(step-bw)/2;let acc=0;let bars='';
+    ORD.forEach(s=>{if(d[s]>0){const h=d[s]/max*ph;acc+=h;bars+='<rect x="'+bx.toFixed(1)+'" y="'+(y0+ph-acc).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+STATUS[s].c+'"/>'}});
+    const yy=+d.k.slice(0,4),mm=+d.k.slice(5,7);
+    const tip=MES[mm-1]+'/'+yy+'\nTotal: '+BRL(d.t)+ORD.filter(s=>d[s]>0).map(s=>'\n'+STATUS[s].l+': '+BRL(d[s])).join('');
+    g+='<g><title>'+esc(tip)+'</title>'+bars+'<rect x="'+(x0+step*idx).toFixed(1)+'" y="'+y0+'" width="'+step.toFixed(1)+'" height="'+ph+'" fill="transparent"/></g>';
+    if(idx%every===0)g+='<text class="ax" x="'+(bx+bw/2).toFixed(1)+'" y="'+(H-12)+'" text-anchor="middle">'+MES[mm-1]+(ms.length>12?'/'+String(yy).slice(2):'')+'</text>';
+  });
+  const legend='<div class="legend">'+ORD.map(s=>'<span><i class="sw" style="background:'+STATUS[s].c+'"></i>'+STATUS[s].l+'</span>').join('')+'</div>';
+  return legend+'<svg class="ch" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Faturamento mensal por situação">'+g+'</svg>';
+}
+function donut(data){
+  const tot=sumBy(data,d=>d.v);
+  if(!tot)return '<div class="empty">Sem dados no período.</div>';
+  const R=62,C=2*Math.PI*R;let off=0;
+  const arcs=data.filter(d=>d.v>0).map(d=>{const len=d.v/tot*C;const s='<circle r="'+R+'" cx="90" cy="90" fill="none" stroke="'+d.c+'" stroke-width="26" stroke-dasharray="'+len.toFixed(2)+' '+(C-len).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 90 90)"><title>'+esc(d.l+': '+BRL(d.v))+'</title></circle>';off+=len;return s}).join('');
+  return '<div class="donut"><svg viewBox="0 0 180 180" role="img" aria-label="Distribuição">'+arcs+'<text x="90" y="86" text-anchor="middle" class="ax">Total</text><text x="90" y="104" text-anchor="middle" fill="#fff" style="font:600 15px var(--serif)">'+short(tot)+'</text></svg>'
+   +'<ul class="dl">'+data.map(d=>'<li><span class="n"><i class="sw" style="background:'+d.c+'"></i>'+esc(d.l)+'</span><span><b style="font-weight:500">'+BRL(d.v)+'</b> <span class="p">'+(d.v/tot*100).toFixed(0)+'%</span></span></li>').join('')+'</ul></div>';
+}
+function hbars(rows){
+  if(!rows.length)return '<div class="empty">Sem dados no período.</div>';
+  const mx=Math.max.apply(null,rows.map(r=>r.v));
+  return rows.map(r=>'<div class="hb"><span class="hb-l" title="'+esc(r.l)+'">'+esc(r.l)+'</span><span class="hb-t"><i style="width:'+(r.v/mx*100).toFixed(1)+'%"></i></span><span class="hb-v">'+BRL(r.v)+'</span></div>').join('');
+}
+function groupSum(list,keyFn,labelFn){
+  const m={};list.forEach(i=>{const k=keyFn(i);m[k]=(m[k]||0)+i.valor});
+  return Object.keys(m).map(k=>({l:labelFn(k),v:m[k]})).sort((a,b)=>b.v-a.v);
+}
+
+/* =====================================================================
+   Views
+   ===================================================================== */
+const V={};
+const RES={};
+
+/* ---------- Dashboard ---------- */
+V.dashboard=()=>'<p class="lead" style="margin:0 0 20px">Resumo do faturamento. Os filtros abaixo valem para todos os números e gráficos.</p>'+filterBar()+'<div id="res">'+RES.dashboard()+'</div>';
+RES.dashboard=()=>{
+  const L=filtered(),live=L.filter(i=>i.status!=='cancelada');
+  const by=s=>L.filter(i=>dispStatus(i)===s);
+  const fat=sumBy(live),rec=sumBy(by('paga')),arec=sumBy(by('receber')),atr=sumBy(by('vencida')),agu=sumBy(by('aguardando'));
+  if(!live.length)return '<div class="empty">Nenhuma fatura encontrada com esses filtros. Ajuste o período ou limpe os filtros.</div>';
+  const ticket=fat/live.length,inad=fat?atr/fat*100:0;
+  const k=(cls,t,v,s)=>'<div class="kpi '+cls+'"><div class="k">'+t+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';
+  const kp='<div class="kpis">'
+    +k('','Faturado',BRL(fat),live.length+' faturas · ticket médio '+BRL(ticket))
+    +k('g','Recebido',BRL(rec),by('paga').length+' pagas · '+(fat?(rec/fat*100).toFixed(0):0)+'% do faturado')
+    +k('a','A receber',BRL(arec),by('receber').length+' dentro do prazo')
+    +k('r','Em atraso',BRL(atr),by('vencida').length+' vencidas · inadimplência '+inad.toFixed(1).replace('.',',')+'%')
+    +k('b','Aguardando aprovação',BRL(agu),by('aguardando').length+' faturas na fila')+'</div>';
+  const stData=['paga','receber','vencida','aguardando'].map(s=>({l:STATUS[s].l,v:sumBy(by(s)),c:STATUS[s].c}));
+  const pgCol=['#22C55E','#8AA4C8','#E5B93C'];
+  const pgData=PAGTOS.map((p,ix)=>({l:p,v:sumBy(live.filter(i=>i.pagto===p)),c:pgCol[ix]}));
+  const serv=groupSum(live,i=>i.servico,x=>x).slice(0,6);
+  const cli=groupSum(live,i=>i.cliente,cname).slice(0,6);
+  return kp+'<div class="charts">'
+   +'<div class="panel wide"><h3>Faturamento por mês</h3><p class="sub">Valor emitido em cada mês, separado por situação. Faturas canceladas ficam de fora.</p>'+monthlyChart(live)+'</div>'
+   +'<div class="panel"><h3>Situação das faturas</h3><p class="sub">Participação de cada situação no valor total.</p>'+donut(stData)+'</div>'
+   +'<div class="panel"><h3>Formas de pagamento</h3><p class="sub">Como os clientes pagam.</p>'+donut(pgData)+'</div>'
+   +'<div class="panel"><h3>Receita por serviço</h3><p class="sub">Os seis serviços que mais faturam.</p>'+hbars(serv)+'</div>'
+   +'<div class="panel"><h3>Maiores clientes</h3><p class="sub">Os seis clientes com maior valor faturado.</p>'+hbars(cli)+'</div></div>';
+};
+
+/* ---------- Faturamento ---------- */
+const SORTERS={id:i=>i.id,cliente:i=>cname(i.cliente).toLowerCase(),servico:i=>i.servico,emissao:i=>i.emissao,venc:i=>i.venc,valor:i=>i.valor,status:i=>dispStatus(i)};
+V.faturamento=()=>{
+  const btn=can('faturamento.criar')?'<button class="btn pri" data-act="novaFatura">Emitir fatura</button>':'';
+  return '<div class="toolbar"><p class="lead" style="margin:0">Emissão, aprovação e baixa são feitas por pessoas diferentes. Quem emite ou edita uma fatura não pode aprová-la, e quem aprova não pode dar baixa.</p>'+btn+'</div>'+filterBar()+'<div id="res">'+RES.faturamento()+'</div>';
+};
+const PER=10;
+RES.faturamento=()=>{
+  const L=filtered();
+  const s=ui.sort,fn=SORTERS[s.k];
+  L.sort((a,b)=>{const x=fn(a),y=fn(b);return (x<y?-1:x>y?1:a.id-b.id)*s.d});
+  const live=L.filter(i=>i.status!=='cancelada');
+  const pages=Math.max(1,Math.ceil(L.length/PER));if(ui.page>pages)ui.page=pages;
+  const rows=L.slice((ui.page-1)*PER,ui.page*PER);
+  const th=(k,t,cls)=>'<th'+(cls?' class="'+cls+'"':'')+' aria-sort="'+(s.k===k?(s.d>0?'ascending':'descending'):'none')+'"><button type="button" data-act="sort" data-k="'+k+'">'+t+(s.k===k?(s.d>0?' ↑':' ↓'):'')+'</button></th>';
+  const exp=can('faturamento.exportar')?'<button class="btn ghost sm" data-act="exportar">Exportar CSV</button>':'';
+  const head='<div class="toolbar" style="margin-bottom:12px"><div class="sum"><span>Faturas: <b>'+L.length+'</b></span><span>Valor faturado: <b>'+BRL(sumBy(live))+'</b></span><span>Recebido: <b>'+BRL(sumBy(L.filter(i=>i.status==='paga')))+'</b></span></div>'+exp+'</div>';
+  if(!L.length)return head+'<div class="empty">Nenhuma fatura encontrada. Ajuste ou limpe os filtros.</div>';
+  const body=rows.map(i=>{
+    const st=dispStatus(i);const a=[];
+    if(i.status==='aguardando'&&can('faturamento.aprovar')){const m=sodMsg(i,'aprovar');a.push(m?'<button class="btn ghost sm dis" data-act="sodInfo" data-m="'+esc(m)+'" title="'+esc(m)+'">Aprovar</button>':'<button class="btn pri sm" data-act="aprovar" data-id="'+i.id+'">Aprovar</button>')}
+    if(i.status==='receber'&&can('faturamento.baixar')){const m=sodMsg(i,'baixar');a.push(m?'<button class="btn ghost sm dis" data-act="sodInfo" data-m="'+esc(m)+'" title="'+esc(m)+'">Dar baixa</button>':'<button class="btn pri sm" data-act="baixar" data-id="'+i.id+'">Dar baixa</button>')}
+    if(i.status==='aguardando'&&can('faturamento.editar'))a.push('<button class="btn ghost sm" data-act="editFatura" data-id="'+i.id+'">Editar</button>');
+    if((i.status==='aguardando'||i.status==='receber')&&can('faturamento.cancelar'))a.push('<button class="btn danger sm" data-act="cancelar" data-id="'+i.id+'">Cancelar</button>');
+    return '<tr class="row" data-act="det" data-id="'+i.id+'"><td class="mono">'+fnum(i.id)+'</td><td>'+esc(cname(i.cliente))+'</td><td>'+esc(i.servico)+'</td><td>'+fmtD(i.emissao)+'</td><td>'+fmtD(i.venc)+'</td><td class="num">'+BRL(i.valor)+'</td><td><span class="chip" style="--c:'+STATUS[st].c+'">'+STATUS[st].l+'</span></td><td><div class="acts">'+a.join('')+'</div></td></tr>';
+  }).join('');
+  const table='<div class="tw"><table class="tbl"><thead><tr>'+th('id','Nº')+th('cliente','Cliente')+th('servico','Serviço')+th('emissao','Emissão')+th('venc','Vencimento')+th('valor','Valor','num')+th('status','Situação')+'<th></th></tr></thead><tbody>'+body+'</tbody></table></div>';
+  const pager='<div class="pager"><span>Página '+ui.page+' de '+pages+' · '+L.length+' faturas</span><div class="b"><button class="btn ghost sm" data-act="pg" data-d="-1"'+(ui.page<=1?' disabled':'')+'>Anterior</button><button class="btn ghost sm" data-act="pg" data-d="1"'+(ui.page>=pages?' disabled':'')+'>Próxima</button></div></div>';
+  return head+table+pager;
+};
+
+/* ---------- Clientes ---------- */
+V.clientes=()=>{
+  const btn=can('clientes.criar')?'<button class="btn pri" data-act="novoCliente">Cadastrar cliente</button>':'';
+  return '<div class="toolbar"><div class="l"><div class="fld" style="min-width:260px"><label for="cq">Buscar cliente</label><input type="search" id="cq" data-s="cq" placeholder="Nome, cidade ou segmento" value="'+esc(ui.cq)+'"></div></div>'+btn+'</div><div id="ctbl">'+RES.clientes()+'</div>';
+};
+RES.clientes=()=>{
+  const q=ui.cq.trim().toLowerCase();
+  const L=db.clientes.filter(c=>!q||(c.nome+' '+c.cidade+' '+c.segmento).toLowerCase().includes(q));
+  if(!L.length)return '<div class="empty">Nenhum cliente encontrado.</div>';
+  return '<div class="tw"><table class="tbl"><thead><tr><th>Cliente</th><th>Segmento</th><th>Cidade</th><th>E-mail</th><th class="num">Faturado</th><th>Situação</th><th></th></tr></thead><tbody>'
+   +L.map(c=>{const tot=sumBy(db.invoices.filter(i=>i.cliente===c.id&&i.status!=='cancelada'));
+     const a=[];
+     if(can('clientes.editar'))a.push('<button class="btn ghost sm" data-act="editCliente" data-id="'+c.id+'">Editar</button>');
+     if(can('clientes.excluir'))a.push('<button class="btn danger sm" data-act="delCliente" data-id="'+c.id+'">Excluir</button>');
+     return '<tr><td>'+esc(c.nome)+'</td><td>'+esc(c.segmento)+'</td><td>'+esc(c.cidade)+'</td><td>'+esc(c.email)+'</td><td class="num">'+BRL(tot)+'</td><td><span class="chip" style="--c:'+(c.ativo?'#22C55E':'#6b7280')+'">'+(c.ativo?'Ativo':'Inativo')+'</span></td><td><div class="acts">'+a.join('')+'</div></td></tr>'}).join('')
+   +'</tbody></table></div>';
+};
+
+/* ---------- Usuários ---------- */
+V.usuarios=()=>{
+  const btn=can('usuarios.criar')?'<button class="btn pri" data-act="novoUsuario">Cadastrar usuário</button>':'';
+  return '<div class="toolbar"><p class="lead" style="margin:0">Aqui você define quem tem acesso e qual perfil cada pessoa usa. O que cada perfil pode fazer é definido em Perfis e permissões.</p>'+btn+'</div>'
+   +'<div class="tw"><table class="tbl"><thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Situação</th><th></th></tr></thead><tbody>'
+   +db.users.map(u=>{const a=[];
+     if(can('usuarios.editar'))a.push('<button class="btn ghost sm" data-act="editUsuario" data-id="'+u.id+'">Editar</button>');
+     if(can('usuarios.desativar')&&u.id!==ME.id)a.push('<button class="btn '+(u.ativo?'danger':'ghost')+' sm" data-act="toggleUsuario" data-id="'+u.id+'">'+(u.ativo?'Desativar':'Reativar')+'</button>');
+     const r=role(u.roleId);
+     return '<tr><td>'+esc(u.nome)+(u.id===ME.id?' <small>(você)</small>':'')+'</td><td>'+esc(u.email)+'</td><td><span class="tag">'+esc(r?r.nome:'Sem perfil')+'</span></td><td><span class="chip" style="--c:'+(u.ativo?'#22C55E':'#6b7280')+'">'+(u.ativo?'Ativo':'Desativado')+'</span></td><td><div class="acts">'+a.join('')+'</div></td></tr>'}).join('')
+   +'</tbody></table></div>';
+};
+
+/* ---------- Perfis ---------- */
+V.papeis=()=>{
+  const btn=can('papeis.editar')?'<button class="btn pri" data-act="novoPerfil">Criar perfil</button>':'';
+  return '<div class="toolbar"><p class="lead" style="margin:0">Cada pessoa usa um único perfil. O sistema impede combinações incompatíveis, como emitir e aprovar a mesma fatura.</p>'+btn+'</div>'
+   +'<div class="rgrid">'+db.roles.map(r=>{
+     const n=db.users.filter(u=>u.roleId===r.id).length;
+     const lines=MODS.map(m=>{const c=m.acoes.filter(a=>r.perms.includes(m.id+'.'+a[0])).length;return c?'<li>'+m.nome+' <span>'+c+'/'+m.acoes.length+'</span></li>':''}).join('');
+     const acts=[];
+     if(can('papeis.editar')){
+       if(db.users.some(u=>u.id===ME.id&&u.roleId===r.id))acts.push('<small>Seu perfil não pode ser editado por você</small>');
+       else{acts.push('<button class="btn ghost sm" data-act="editPerfil" data-id="'+r.id+'">Editar permissões</button>');if(!n)acts.push('<button class="btn danger sm" data-act="delPerfil" data-id="'+r.id+'">Excluir</button>')}
+     }else acts.push('<button class="btn ghost sm" data-act="verPerfil" data-id="'+r.id+'">Ver permissões</button>');
+     return '<div class="rcard"><h3>'+esc(r.nome)+'</h3><p>'+esc(r.desc)+'</p><ul>'+(lines||'<li>Sem permissões</li>')+'</ul><div class="f"><small>'+n+' '+(n===1?'usuário':'usuários')+'</small><div class="acts" style="display:flex;gap:6px;flex-wrap:wrap">'+acts.join('')+'</div></div></div>'}).join('')+'</div>'
+   +'<div class="panel" style="margin-top:22px"><h3>Regras de segregação de funções</h3><p class="sub">Aplicadas a todos os perfis, sem exceção.</p><ul style="margin:0;padding-left:18px;color:var(--soft);font-size:14px;display:grid;gap:4px">'+CONFLITOS.map(c=>'<li>'+esc(c.msg)+'</li>').join('')+'<li>Ninguém aprova, dá baixa ou altera o próprio perfil de acesso.</li><li>O sistema sempre mantém ao menos um usuário ativo que gerencie usuários e perfis.</li></ul></div>';
+};
+
+/* ---------- Auditoria ---------- */
+V.auditoria=()=>'<div class="toolbar"><div class="l"><div class="fld" style="min-width:240px"><label for="aq">Buscar</label><input type="search" id="aq" data-s="aq" placeholder="Ação ou detalhe" value="'+esc(ui.aq)+'"></div><div class="fld" style="min-width:200px"><label for="au">Usuário</label><select id="au" data-s="au"><option value="">Todos</option>'+db.users.map(u=>'<option value="'+u.id+'"'+(ui.au===u.id?' selected':'')+'>'+esc(u.nome)+'</option>').join('')+'</select></div></div></div><div id="atbl">'+RES.auditoria()+'</div>';
+RES.auditoria=()=>{
+  const q=ui.aq.trim().toLowerCase();
+  const L=db.log.slice().reverse().filter(l=>(!ui.au||l.u===ui.au)&&(!q||(l.a+' '+l.d+' '+l.n).toLowerCase().includes(q))).slice(0,200);
+  if(!L.length)return '<div class="empty">Nenhum registro encontrado.</div>';
+  return '<div class="tw"><table class="tbl"><thead><tr><th>Data</th><th>Usuário</th><th>Módulo</th><th>O que aconteceu</th></tr></thead><tbody>'+L.map(l=>'<tr><td class="mono" style="white-space:nowrap">'+fmtDT(l.t)+'</td><td>'+esc(l.n)+'</td><td><span class="tag">'+esc(l.a)+'</span></td><td>'+esc(l.d)+'</td></tr>').join('')+'</tbody></table></div>';
+};
+
+/* =====================================================================
+   Shell, login e navegação
+   ===================================================================== */
+function renderApp(){
+  const allowed=NAV.filter(n=>can(n.perm));
+  if(!ui.view||!allowed.some(n=>n.id===ui.view))ui.view=allowed.length?allowed[0].id:null;
+  let last='';
+  const nav=allowed.map(n=>{const g=n.g!==last?'<div class="grp">'+n.g+'</div>':'';last=n.g;return g+'<button type="button" class="nv'+(n.id===ui.view?' on':'')+'" data-act="go" data-v="'+n.id+'"'+(n.id===ui.view?' aria-current="page"':'')+'>'+n.label+'</button>'}).join('');
+  const r=role(ME.roleId);
+  root.innerHTML='<div class="app"><aside class="side"><div><span class="brand-mark">Ryan<em>_next_tech</em></span><span class="brand-sub">painel administrativo</span></div><nav aria-label="Menu principal">'+nav+'</nav><div class="side-f">Dados conectados ao banco MySQL.</div></aside>'
+   +'<div class="main"><header class="top"><h1 id="ptitle"></h1><div class="who"><span><b>'+esc(ME.nome)+'</b><small>'+esc(r?r.nome:'')+'</small></span><a class="btn ghost sm" href="admin.ryan.php?logout=1" aria-label="Sair do painel">Sair</a></div></header><div id="view"></div></div></div>';
+  const n=NAV.find(x=>x.id===ui.view);
+  if(!n){$('#ptitle').textContent='Sem acesso';$('#view').innerHTML='<div class="empty">Seu perfil ainda não tem nenhum módulo liberado. Peça ao gestor de acessos para ajustar o perfil.</div>';return}
+  $('#ptitle').textContent=n.label;$('#view').innerHTML=V[ui.view]();
+}
+function refresh(){
+  const t={dashboard:'#res',faturamento:'#res',clientes:'#ctbl',auditoria:'#atbl'}[ui.view];
+  const el=t&&$(t);if(el&&RES[ui.view])el.innerHTML=RES[ui.view]();
+}
+
+/* =====================================================================
+   Ações
+   ===================================================================== */
+function selOpts(arr,sel){return arr.map(a=>'<option value="'+esc(a[0])+'"'+(a[0]===sel?' selected':'')+'>'+esc(a[1])+'</option>').join('')}
+function invFormBody(i){
+  const cls=db.clientes.filter(c=>c.ativo||(i&&i.cliente===c.id));
+  return '<div class="grid2">'
+   +'<div class="fld"><label for="i-cli">Cliente</label><select id="i-cli" name="cliente">'+selOpts(cls.map(c=>[c.id,c.nome]),i&&i.cliente)+'</select></div>'
+   +'<div class="fld"><label for="i-srv">Serviço</label><select id="i-srv" name="servico">'+selOpts(SERVICOS.map(s=>[s[0],s[0]]),i&&i.servico)+'</select></div>'
+   +'<div class="fld full"><label for="i-desc">Descrição (opcional)</label><input type="text" id="i-desc" name="desc" maxlength="120" value="'+esc(i?i.desc:'')+'"></div>'
+   +'<div class="fld"><label for="i-val">Valor (R$)</label><input type="number" id="i-val" name="valor" min="0.01" step="0.01" value="'+(i?i.valor:'')+'"></div>'
+   +'<div class="fld"><label for="i-pg">Forma de pagamento</label><select id="i-pg" name="pagto">'+selOpts(PAGTOS.map(p=>[p,p]),i&&i.pagto)+'</select></div>'
+   +'<div class="fld"><label for="i-em">Emissão</label><input type="date" id="i-em" name="emissao" value="'+(i?i.emissao:TODAY)+'"></div>'
+   +'<div class="fld"><label for="i-vc">Vencimento</label><input type="date" id="i-vc" name="venc" value="'+(i?i.venc:addDays(TODAY,15))+'"></div></div>';
+}
+function readInv(fd){
+  const v={cliente:fd.get('cliente'),servico:fd.get('servico'),desc:String(fd.get('desc')||'').trim(),valor:parseFloat(fd.get('valor')),pagto:fd.get('pagto'),emissao:fd.get('emissao'),venc:fd.get('venc')};
+  if(!v.cliente)return 'Escolha o cliente.';
+  if(!(v.valor>0))return 'Informe um valor maior que zero.';
+  if(!v.emissao||!v.venc)return 'Informe as datas de emissão e vencimento.';
+  if(v.venc<v.emissao)return 'O vencimento não pode ser anterior à emissão.';
+  v.valor=Math.round(v.valor*100)/100;return v;
+}
+const invById=id=>db.invoices.find(i=>i.id===+id);
+
+const ACT={
+  go(d){ui.view=d.v;ui.page=1;renderApp()},
+  closeModal(){closeModal()},
+  limpar(){ui.f=defaultF();ui.page=1;$('#filters').outerHTML=filterBar();refresh()},
+  sort(d){const s=ui.sort;if(s.k===d.k)s.d*=-1;else{s.k=d.k;s.d=(d.k==='valor'||d.k==='emissao'||d.k==='id')?-1:1}ui.page=1;refresh()},
+  pg(d){ui.page+=(+d.d);refresh()},
+  sodInfo(d){toast(d.m,true)},
+
+  /* --- faturas --- */
+  novaFatura(){
+    if(!need('faturamento.criar'))return;
+    modal({title:'Emitir fatura',body:invFormBody(null),ok:'Emitir fatura',onSubmit:fd=>{
+      const v=readInv(fd);if(typeof v==='string')return v;
+      const inv=Object.assign({id:db.seq++,status:'aguardando',criadoPor:ME.id,criadoEm:TODAY,tocou:[ME.id],aprovadoPor:null,aprovadoEm:null,baixadoPor:null,pagoEm:null,canceladoPor:null,motivo:''},v);
+      db.invoices.push(inv);log('Faturamento','Emitiu '+fnum(inv.id)+' para '+cname(inv.cliente)+' ('+BRL(inv.valor)+'). Aguardando aprovação.');save();
+      toast(fnum(inv.id)+' emitida. Ela aguarda aprovação de outra pessoa.');renderApp();return true;
+    }});
+  },
+  editFatura(d){
+    if(!need('faturamento.editar'))return;const i=invById(d.id);
+    if(!i||i.status!=='aguardando')return toast('Só faturas aguardando aprovação podem ser editadas.',true);
+    modal({title:'Editar '+fnum(i.id),body:invFormBody(i),onSubmit:fd=>{
+      const v=readInv(fd);if(typeof v==='string')return v;
+      Object.assign(i,v);if(!i.tocou.includes(ME.id))i.tocou.push(ME.id);
+      log('Faturamento','Editou '+fnum(i.id)+'.');save();toast(fnum(i.id)+' atualizada.');renderApp();return true;
+    }});
+  },
+  aprovar(d){
+    if(!need('faturamento.aprovar'))return;const i=invById(d.id);if(!i||i.status!=='aguardando')return;
+    const m=sodMsg(i,'aprovar');if(m)return toast(m,true);
+    modal({title:'Aprovar '+fnum(i.id),ok:'Aprovar emissão',body:'<p style="margin:0">Confirme a emissão de <b>'+fnum(i.id)+'</b> para <b>'+esc(cname(i.cliente))+'</b>, no valor de <b>'+BRL(i.valor)+'</b>, com vencimento em '+fmtD(i.venc)+'.</p><p class="sub" style="margin:10px 0 0;color:var(--gray)">Emitida por '+esc(uname(i.criadoPor))+'. Depois de aprovada, a fatura não pode mais ser editada.</p>',onSubmit:()=>{
+      const m2=sodMsg(i,'aprovar');if(m2)return m2;
+      i.status='receber';i.aprovadoPor=ME.id;i.aprovadoEm=TODAY;
+      log('Faturamento','Aprovou '+fnum(i.id)+' ('+BRL(i.valor)+').');save();toast(fnum(i.id)+' aprovada.');renderApp();return true;
+    }});
+  },
+  baixar(d){
+    if(!need('faturamento.baixar'))return;const i=invById(d.id);if(!i||i.status!=='receber')return;
+    const m=sodMsg(i,'baixar');if(m)return toast(m,true);
+    modal({title:'Dar baixa em '+fnum(i.id),ok:'Registrar pagamento',body:'<p style="margin:0 0 14px">'+esc(cname(i.cliente))+' · <b>'+BRL(i.valor)+'</b></p><div class="fld"><label for="b-d">Data do pagamento</label><input type="date" id="b-d" name="data" value="'+TODAY+'" max="'+TODAY+'"></div>',onSubmit:fd=>{
+      const dt=fd.get('data');if(!dt)return 'Informe a data do pagamento.';if(dt<i.emissao)return 'A data não pode ser anterior à emissão.';if(dt>TODAY)return 'A data não pode ser futura.';
+      const m2=sodMsg(i,'baixar');if(m2)return m2;
+      i.status='paga';i.baixadoPor=ME.id;i.pagoEm=dt;
+      log('Faturamento','Registrou o pagamento de '+fnum(i.id)+' ('+BRL(i.valor)+') em '+fmtD(dt)+'.');save();toast('Pagamento de '+fnum(i.id)+' registrado.');renderApp();return true;
+    }});
+  },
+  cancelar(d){
+    if(!need('faturamento.cancelar'))return;const i=invById(d.id);if(!i||(i.status!=='aguardando'&&i.status!=='receber'))return;
+    modal({title:'Cancelar '+fnum(i.id),ok:'Cancelar fatura',body:'<div class="fld"><label for="c-m">Motivo do cancelamento</label><textarea id="c-m" name="motivo" maxlength="200"></textarea></div>',onSubmit:fd=>{
+      const mo=String(fd.get('motivo')||'').trim();if(mo.length<5)return 'Descreva o motivo (mínimo de 5 caracteres).';
+      i.status='cancelada';i.canceladoPor=ME.id;i.motivo=mo;
+      log('Faturamento','Cancelou '+fnum(i.id)+'. Motivo: '+mo);save();toast(fnum(i.id)+' cancelada.');renderApp();return true;
+    }});
+  },
+  det(d){
+    const i=invById(d.id);if(!i)return;const st=dispStatus(i);
+    const ev=['<li>Emitida por <b>'+esc(uname(i.criadoPor))+'</b><small>'+fmtD(i.criadoEm)+'</small></li>'];
+    if(i.aprovadoPor)ev.push('<li>Aprovada por <b>'+esc(uname(i.aprovadoPor))+'</b><small>'+fmtD(i.aprovadoEm)+'</small></li>');
+    if(i.baixadoPor)ev.push('<li>Pagamento registrado por <b>'+esc(uname(i.baixadoPor))+'</b><small>Pago em '+fmtD(i.pagoEm)+'</small></li>');
+    if(i.canceladoPor)ev.push('<li>Cancelada por <b>'+esc(uname(i.canceladoPor))+'</b><small>'+esc(i.motivo)+'</small></li>');
+    modal({title:fnum(i.id),noSubmit:true,body:'<dl class="dgrid"><div><dt>Cliente</dt><dd>'+esc(cname(i.cliente))+'</dd></div><div><dt>Serviço</dt><dd>'+esc(i.servico)+'</dd></div><div><dt>Valor</dt><dd>'+BRL(i.valor)+'</dd></div><div><dt>Situação</dt><dd><span class="chip" style="--c:'+STATUS[st].c+'">'+STATUS[st].l+'</span></dd></div><div><dt>Emissão</dt><dd>'+fmtD(i.emissao)+'</dd></div><div><dt>Vencimento</dt><dd>'+fmtD(i.venc)+'</dd></div><div><dt>Forma de pagamento</dt><dd>'+esc(i.pagto)+'</dd></div><div><dt>Descrição</dt><dd>'+esc(i.desc||'—')+'</dd></div></dl><h4 style="font-size:15px;margin-bottom:10px">Histórico</h4><ul class="tl">'+ev.join('')+'</ul>'});
+  },
+  exportar(){
+    if(!need('faturamento.exportar'))return;
+    const L=filtered();
+    const c=v=>{let s=String(v==null?'':v);if(/^[=+\-@]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};
+    const rows=[['Número','Cliente','Serviço','Emissão','Vencimento','Valor','Situação','Forma de pagamento','Emitida por','Aprovada por','Pago em']].concat(L.map(i=>[fnum(i.id),cname(i.cliente),i.servico,fmtD(i.emissao),fmtD(i.venc),i.valor.toFixed(2).replace('.',','),STATUS[dispStatus(i)].l,i.pagto,uname(i.criadoPor),i.aprovadoPor?uname(i.aprovadoPor):'',i.pagoEm?fmtD(i.pagoEm):'']));
+    const csv='\uFEFF'+rows.map(r=>r.map(c).join(';')).join('\r\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='faturamento-'+TODAY+'.csv';document.body.appendChild(a);a.click();a.remove();
+    log('Faturamento','Exportou '+L.length+' faturas em CSV.');save();toast(L.length+' faturas exportadas.');
+  },
+
+  /* --- clientes --- */
+  novoCliente(){if(need('clientes.criar'))clienteModal(null)},
+  editCliente(d){if(need('clientes.editar'))clienteModal(db.clientes.find(c=>c.id===d.id))},
+  delCliente(d){
+    if(!need('clientes.excluir'))return;const c=db.clientes.find(x=>x.id===d.id);if(!c)return;
+    if(db.invoices.some(i=>i.cliente===c.id))return toast('Este cliente tem faturas e não pode ser excluído. Marque-o como inativo na edição.',true);
+    modal({title:'Excluir cliente',ok:'Excluir',body:'<p style="margin:0">Excluir <b>'+esc(c.nome)+'</b>? Esta ação não pode ser desfeita.</p>',onSubmit:()=>{
+      db.clientes=db.clientes.filter(x=>x.id!==c.id);log('Clientes','Excluiu o cliente '+c.nome+'.');save();toast('Cliente excluído.');renderApp();return true}});
+  },
+
+  /* --- usuários --- */
+  novoUsuario(){if(need('usuarios.criar'))usuarioModal(null)},
+  editUsuario(d){if(need('usuarios.editar'))usuarioModal(userById(d.id))},
+  toggleUsuario(d){
+    if(!need('usuarios.desativar'))return;const u=userById(d.id);if(!u||u.id===ME.id)return;
+    const us=db.users.map(x=>x.id===u.id?Object.assign({},x,{ativo:!x.ativo}):x);
+    if(lockout(us,db.roles))return toast('É preciso manter ao menos um usuário ativo que gerencie usuários e perfis.',true);
+    u.ativo=!u.ativo;log('Usuários',(u.ativo?'Reativou ':'Desativou ')+'o acesso de '+u.nome+'.');save();toast(u.ativo?'Acesso reativado.':'Acesso desativado.');renderApp();
+  },
+
+  /* --- perfis --- */
+  novoPerfil(){if(need('papeis.editar'))perfilModal(null)},
+  editPerfil(d){
+    if(!need('papeis.editar'))return;const r=role(d.id);
+    if(ME.roleId===r.id)return toast('Você não pode alterar o perfil que usa.',true);
+    perfilModal(r);
+  },
+  verPerfil(d){perfilModal(role(d.id),true)},
+  delPerfil(d){
+    if(!need('papeis.editar'))return;const r=role(d.id);if(!r)return;
+    if(db.users.some(u=>u.roleId===r.id))return toast('Há usuários neste perfil. Mude o perfil deles antes de excluir.',true);
+    modal({title:'Excluir perfil',ok:'Excluir',body:'<p style="margin:0">Excluir o perfil <b>'+esc(r.nome)+'</b>?</p>',onSubmit:()=>{
+      db.roles=db.roles.filter(x=>x.id!==r.id);log('Perfis','Excluiu o perfil '+r.nome+'.');save();toast('Perfil excluído.');renderApp();return true}});
+  }
+};
+
+function clienteModal(c){
+  modal({title:c?'Editar cliente':'Cadastrar cliente',body:'<div class="grid2">'
+   +'<div class="fld full"><label for="c-n">Nome</label><input type="text" id="c-n" name="nome" maxlength="80" value="'+esc(c?c.nome:'')+'"></div>'
+   +'<div class="fld"><label for="c-d">CPF ou CNPJ</label><input type="text" id="c-d" name="doc" maxlength="20" value="'+esc(c?c.doc:'')+'"></div>'
+   +'<div class="fld"><label for="c-e">E-mail</label><input type="email" id="c-e" name="email" maxlength="80" value="'+esc(c?c.email:'')+'"></div>'
+   +'<div class="fld"><label for="c-c">Cidade</label><input type="text" id="c-c" name="cidade" maxlength="60" value="'+esc(c?c.cidade:'')+'"></div>'
+   +'<div class="fld"><label for="c-s">Segmento</label><input type="text" id="c-s" name="segmento" maxlength="40" value="'+esc(c?c.segmento:'')+'"></div>'
+   +(c?'<div class="fld full"><label style="display:flex;gap:8px;align-items:center;color:var(--soft);cursor:pointer"><input type="checkbox" name="ativo"'+(c.ativo?' checked':'')+'> Cliente ativo (aparece ao emitir faturas)</label></div>':'')
+   +'</div>',onSubmit:fd=>{
+    const v={nome:String(fd.get('nome')||'').trim(),doc:String(fd.get('doc')||'').trim(),email:String(fd.get('email')||'').trim(),cidade:String(fd.get('cidade')||'').trim(),segmento:String(fd.get('segmento')||'').trim()};
+    if(v.nome.length<2)return 'Informe o nome do cliente.';
+    if(v.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email))return 'O e-mail informado não é válido.';
+    if(c){v.ativo=!!fd.get('ativo');Object.assign(c,v);log('Clientes','Editou o cliente '+c.nome+'.')}
+    else{v.id='c'+Date.now().toString(36);v.ativo=true;db.clientes.push(v);log('Clientes','Cadastrou o cliente '+v.nome+'.')}
+    save();toast('Cliente salvo.');renderApp();return true;
+  }});
+}
+function usuarioModal(u){
+  const self=u&&u.id===ME.id;
+  modal({title:u?'Editar usuário':'Cadastrar usuário',body:'<div class="grid2">'
+   +'<div class="fld"><label for="u-n">Nome</label><input type="text" id="u-n" name="nome" maxlength="80" value="'+esc(u?u.nome:'')+'"></div>'
+   +'<div class="fld"><label for="u-e">E-mail de acesso</label><input type="email" id="u-e" name="email" maxlength="80" value="'+esc(u?u.email:'')+'"></div>'
+   +'<div class="fld"><label for="u-r">Perfil</label><select id="u-r" name="roleId"'+(self?' disabled':'')+'>'+selOpts(db.roles.map(r=>[r.id,r.nome]),u&&u.roleId)+'</select>'+(self?'<small>Você não pode mudar o seu próprio perfil.</small>':'')+'</div>'
+   +'<div class="fld"><label for="u-p">'+(u?'Nova senha (deixe em branco para manter)':'Senha inicial')+'</label><input type="password" id="u-p" name="senha" autocomplete="new-password"></div></div>',
+   onSubmit:fd=>{
+    const nome=String(fd.get('nome')||'').trim(),email=String(fd.get('email')||'').trim().toLowerCase(),senha=String(fd.get('senha')||'');
+    const roleId=self?u.roleId:fd.get('roleId');
+    if(nome.length<2)return 'Informe o nome.';
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return 'Informe um e-mail válido.';
+    if(db.users.some(x=>x.email.toLowerCase()===email&&(!u||x.id!==u.id)))return 'Já existe um usuário com este e-mail.';
+    if(!u&&senha.length<6)return 'A senha precisa ter pelo menos 6 caracteres.';
+    if(u&&senha&&senha.length<6)return 'A nova senha precisa ter pelo menos 6 caracteres.';
+    if(!role(roleId))return 'Escolha um perfil.';
+    if(u){
+      const us=db.users.map(x=>x.id===u.id?Object.assign({},x,{roleId:roleId}):x);
+      if(lockout(us,db.roles))return 'É preciso manter ao menos um usuário ativo que gerencie usuários e perfis.';
+      const mudou=u.roleId!==roleId;
+      u.nome=nome;u.email=email;u.roleId=roleId;if(senha)u.pass=hash(senha);
+      log('Usuários','Editou '+nome+(mudou?' (novo perfil: '+role(roleId).nome+')':'')+(senha?' e redefiniu a senha':'')+'.');
+    }else{
+      db.users.push({id:'u'+Date.now().toString(36),nome:nome,email:email,roleId:roleId,ativo:true,pass:hash(senha),ultimo:''});
+      log('Usuários','Cadastrou '+nome+' com o perfil '+role(roleId).nome+'.');
+    }
+    save();toast('Usuário salvo.');renderApp();return true;
+  }});
+}
+function permsFromForm(form){return Array.from(form.querySelectorAll('input[name=p]:checked')).map(x=>x.value)}
+function confHtml(perms){
+  const c=conflitos(perms);
+  return c.length?'<div class="conf bad"><b>Combinação não permitida</b><ul>'+c.map(x=>'<li>'+esc(x.msg)+'</li>').join('')+'</ul></div>':'<div class="conf ok">Nenhum conflito de funções neste perfil.</div>';
+}
+function perfilModal(r,readonly){
+  const perms=r?r.perms:[];
+  const matrix=MODS.map(m=>'<div class="mrow"><strong>'+m.nome+'</strong><div class="mchecks">'+m.acoes.map(a=>{const k=m.id+'.'+a[0];return '<label><input type="checkbox" name="p" value="'+k+'" data-m="'+m.id+'" data-a="'+a[0]+'"'+(perms.includes(k)?' checked':'')+(readonly?' disabled':'')+'> '+a[1]+'</label>'}).join('')+'</div></div>').join('');
+  modal({lg:true,title:readonly?r.nome:(r?'Editar perfil':'Criar perfil'),noSubmit:!!readonly,ok:'Salvar perfil',
+   body:'<div class="grid2"><div class="fld"><label for="r-n">Nome do perfil</label><input type="text" id="r-n" name="nome" maxlength="40" value="'+esc(r?r.nome:'')+'"'+(readonly?' disabled':'')+'></div><div class="fld"><label for="r-d">Descrição</label><input type="text" id="r-d" name="desc" maxlength="120" value="'+esc(r?r.desc:'')+'"'+(readonly?' disabled':'')+'></div></div><div style="margin-top:16px"><div class="lbl">Permissões por módulo</div>'+matrix+'</div><div id="conf-box">'+confHtml(perms)+'</div>',
+   onInput:(form,e)=>{
+     const t=e.target;
+     if(t.name==='p'){
+       if(t.dataset.a==='ver'&&!t.checked)form.querySelectorAll('input[data-m="'+t.dataset.m+'"]').forEach(x=>{x.checked=false});
+       else if(t.dataset.a!=='ver'&&t.checked){const v=form.querySelector('input[data-m="'+t.dataset.m+'"][data-a="ver"]');if(v)v.checked=true}
+       $('#conf-box').innerHTML=confHtml(permsFromForm(form));
+     }
+   },
+   onSubmit:(fd,form)=>{
+     if(!need('papeis.editar'))return 'Sem permissão.';
+     const nome=String(fd.get('nome')||'').trim(),desc=String(fd.get('desc')||'').trim(),ps=permsFromForm(form).filter(p=>ALL_PERMS.includes(p));
+     if(nome.length<3)return 'Dê um nome ao perfil.';
+     if(db.roles.some(x=>x.nome.toLowerCase()===nome.toLowerCase()&&(!r||x.id!==r.id)))return 'Já existe um perfil com este nome.';
+     if(!ps.length)return 'Marque ao menos uma permissão.';
+     const c=conflitos(ps);if(c.length)return 'Combinação não permitida: '+c.map(x=>x.msg).join(' ');
+     if(r&&ME.roleId===r.id)return 'Você não pode alterar o perfil que usa.';
+     const rs=db.roles.map(x=>r&&x.id===r.id?Object.assign({},x,{perms:ps}):x);
+     if(lockout(db.users,rs))return 'É preciso manter ao menos um usuário ativo que gerencie usuários e perfis.';
+     if(r){const antes=r.perms.length;r.nome=nome;r.desc=desc;r.perms=ps;log('Perfis','Alterou o perfil '+nome+' ('+antes+' → '+ps.length+' permissões).')}
+     else{db.roles.push({id:'r_'+Date.now().toString(36),nome:nome,desc:desc,perms:ps});log('Perfis','Criou o perfil '+nome+' ('+ps.length+' permissões).')}
+     save();toast('Perfil salvo.');renderApp();return true;
+   }});
+}
+
+/* =====================================================================
+   Eventos globais
+   ===================================================================== */
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const fn=ACT[el.dataset.act];if(!fn)return;
+  if(el.tagName==='BUTTON'&&el.disabled)return;
+  fn(el.dataset,el,e);
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.as)return;
+  if(t.dataset&&t.dataset.f){
+    ui.f[t.dataset.f]=t.value;ui.page=1;
+    if(t.dataset.f==='preset'){const c=$('#f-cust');if(c)c.hidden=t.value!=='custom'}
+    refresh();
+  }else if(t.dataset&&t.dataset.s){ui[t.dataset.s]=t.value;refresh()}
+});
+
+/* =====================================================================
+   Início
+   ===================================================================== */
+(async function init(){
+  try{
+    if(!window.ADMIN_API_URL)throw new Error('Acesse este painel por admin.ryan.php em um servidor com PHP.');
+    const response=await fetch(window.ADMIN_API_URL,{headers:{'Accept':'application/json'}});
+    if(!response.ok)throw new Error('Não foi possível carregar os dados do servidor.');
+    const state=await response.json();
+    db.clientes=state.clientes||[];
+    db.invoices=state.invoices||[];
+    db.seq=db.invoices.reduce((max,invoice)=>Math.max(max,invoice.id),0)+1;
+    const permissions=['dashboard.ver','faturamento.ver','faturamento.criar','faturamento.editar','faturamento.cancelar','faturamento.aprovar','faturamento.baixar','faturamento.exportar','clientes.ver','clientes.criar','clientes.editar','clientes.excluir'];
+    db.roles=[{id:'r_admin',nome:'Administrador',desc:'Acesso administrativo ao painel.',perms:permissions}];
+    db.users=[{id:'admin',nome:state.admin,email:state.admin,roleId:'r_admin',ativo:true}];
+    ME=db.users[0];
+    renderApp();
+  }catch(error){
+    root.innerHTML='<div class="empty">'+esc(error.message||'Erro ao conectar ao servidor.')+'</div>';
+  }
+})();
+})();
+</script>
+</body>
+</html>
